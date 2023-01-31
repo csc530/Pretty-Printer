@@ -85,6 +85,15 @@ Public Class PrettyPrinter
                     End If
                     sequences.Append("m"c)
                     Exit Select
+                Case ConsoleVirtualTerminalSequences.TextColour
+                    If TextColour = Nothing Then
+                        sequences.Append("39")
+                        ConsoleModifications.Remove(ConsoleVirtualTerminalSequences.TextBackground)
+                    Else
+                        sequences.Append($"38;2;{TextColour.R};{TextColour.G};{TextColour.B}")
+                    End If
+                    sequences.Append("m"c)
+                    Exit Select
                 Case Else
                     sequences.Remove(sequences.Length - SequenceStart.Length, SequenceStart.Length)
                     '                    My.Applicati­on.Log can`t find log on `my`
