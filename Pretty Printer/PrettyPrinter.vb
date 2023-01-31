@@ -1,6 +1,7 @@
 Option Strict On
 
 Imports System.Drawing
+Imports System.Text
 
 Public Class PrettyPrinter
 
@@ -37,7 +38,16 @@ Public Class PrettyPrinter
 	End Enum
 
 	Public ReadOnly SequenceStart As String = Convert.ToChar(ConsoleKey.Escape) & "["
-	Public Property VirtualSequence() As String
+	Public Property VirtualSequence() As List(Of String)
+	Private Function GetVirtualSequences() As String
+		Dim sequences = New StringBuilder()
+		For Each sequence In VirtualSequence
+			sequences.Append(sequence)
+		Next
+		VirtualSequence.Clear()
+		Return sequences.ToString()
+	End Function
+	Private _BackgroundColour As Color
 
 	Public Property BackgroundColour As Color
 		Get
@@ -50,64 +60,57 @@ Public Class PrettyPrinter
 	End Property
 
 	Private Sub UpdateVirtualSequence()
-		Dim sequences = New List(Of String)
 
 		REM Background colour
 		' https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#text-formatting
-		If IsConsoleColour(BackgroundColour) Then
+		If BackgroundColour = Nothing Then
+			VirtualSequence.Add($"{SequenceStart}0m")
+		ElseIf IsConsoleColour(BackgroundColour) Then
 			Console.BackgroundColor = [Enum].Parse(Of ConsoleColor)(BackgroundColour.Name)
 		Else
-			sequences.Add($"{SequenceStart}48;2;{BackgroundColour.R};{BackgroundColour.G};{BackgroundColour.B}m")
+			VirtualSequence.Add($"{SequenceStart}48;2;{BackgroundColour.R};{BackgroundColour.G};{BackgroundColour.B}m")
 		End If
 
-		sequences.ForEach(Sub(sequence) Console.Write(sequence))
 	End Sub
 
-	REM Settings
-	Private _BackgroundColour As Color
+	Sub New()
+		VirtualSequence = New List(Of String)
+	End Sub
+
+
 
 	''' <summary>Resets this instance.</summary>
 	Sub Reset()
-		VirtualSequence = Nothing
-		ResetBackground()
+		VirtualSequence.Clear()
+		BackgroundColour = Nothing
 
-		' print reset
-		Dim sequences = New List(Of String)
-		REM colour
-		sequences.Add(SequenceStart & "0m")
 
-		sequences.ForEach(Sub(sequence) Console.Write(sequence))
+		Console.ResetColor()
+		Console.Write(GetVirtualSequences)
 	End Sub
 
 
 #Region "Print"
-#Region "New Line"
 	Sub PrintLine(value As String)
-		Console.WriteLine(VirtualSequence & value)
+		Console.WriteLine(GetVirtualSequences() & value)
 	End Sub
-#End Region
-#Region "no line"
+
+
 	Sub Print(value As String)
-		Console.Write(VirtualSequence & value)
+		Console.Write(GetVirtualSequences() & value)
 	End Sub
-#End Region
 #End Region
 
 #Region "Colour"
 
 
-	Private Function IsConsoleColour(colour As Color) As Boolean
+	Private Shared Function IsConsoleColour(colour As Color) As Boolean
 		If colour.Name = "0" Then
 			Return False
 		Else Return [Enum].TryParse(Of ConsoleColor)(colour.Name, True, Nothing)
 		End If
 
 	End Function
-
-
-	Public Sub ResetBackground()
-		BackgroundColour = Nothing
-	End Sub
 #Region "Text"
 
 #End Region
