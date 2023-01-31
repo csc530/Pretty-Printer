@@ -8,7 +8,7 @@ Module Program
             .BackgroundColour = Color.Blue
         }
         PrettyPrinter.PrintLine("Blue background")
-        Console.WriteLine($"{Console.BackgroundColor} = {ConsoleColor.Blue}")
+        PrettyPrinter.PrintLine($"{Console.BackgroundColor} = {ConsoleColor.Blue}")
 
         PrettyPrinter.Reset()
         PrettyPrinter.PrintLine(Console.BackgroundColor.ToString & " or is it " & PrettyPrinter.BackgroundColour.ToString)
