@@ -1,4 +1,4 @@
-Imports System
+﻿Imports System
 Imports System.Drawing
 Imports Pretty_Printer
 
@@ -35,5 +35,11 @@ Module Program
 		prettyPrinter.PrintLine("Well that wasssssss a colour")
 		prettyPrinter.TextColour = Nothing
 		prettyPrinter.PrintLine("Ah back to the way things should")
+
+		prettyPrinter.Clear()
+		prettyPrinter.Print("Well let's do something for the one line", Color.Beige, Color.FromArgb(123))
+		prettyPrinter.PrintLine(" ___ Impressive but let's try state maintenance?")
+		prettyPrinter.PrintLine("Well colour this on for size🌠🌠🌠🌠🌃", Color.Black, Color.Cornsilk)
+
 	End Sub
 End Module

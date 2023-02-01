@@ -91,8 +91,8 @@ Public Class PrettyPrinter
 					Exit Select
 				Case ConsoleVirtualTerminalSequences.TextColour
 					If TextColour = Nothing Then
-						sequences.Append("39")
-						ConsoleModifications.Remove(ConsoleVirtualTerminalSequences.TextBackground)
+						sequences.Append(39)
+						ConsoleModifications.Remove(ConsoleVirtualTerminalSequences.TextColour)
 					Else
 						sequences.Append($"38;2;{TextColour.R};{TextColour.G};{TextColour.B}")
 					End If
@@ -107,7 +107,7 @@ Public Class PrettyPrinter
 		Next
 		Return sequences.ToString()
 	End Function
-
+	
 	Private _underline as boolean
 	public Property	Underline as boolean
 		get 
@@ -178,22 +178,44 @@ Public Class PrettyPrinter
 	Sub Reset()
 		BackgroundColour = Nothing
 		TextColour = Nothing
-		Underline = false
+		Underline = False
 
 		Console.Write(GetVirtualSequences)
+	End Sub
+
+	''' <summary>
+	''' Clears console window of outputs
+	''' </summary>
+	Sub Clear()
+		Console.Clear()
 	End Sub
 
 
 #Region "Print"
 
+	Sub PrintLine(value As String, Optional background as Color = nothing, Optional text as Color = nothing)
+		Print(value & Environment.NewLine, background, text)
+	End Sub
+
 	Sub PrintLine(value As String)
 		Print(value & Environment.NewLine)
 	End Sub
 
+	Sub Print(value As String, Optional background As Color = Nothing, Optional text As Color = Nothing)
+
+		Dim previous = (BackgroundColour, TextColour)
+		BackgroundColour = background
+		TextColour = text
+		Print(value)
+		' ? used to prevent modification of the modifications set
+		BackgroundColour = previous.BackgroundColour
+		TextColour = previous.TextColour
+	End Sub
 
 	Sub Print(value As String)
 		Console.Write(GetVirtualSequences() & value)
 	End Sub
+
 
 #End Region
 
