@@ -1,33 +1,41 @@
 Imports System
 Imports System.Drawing
+Imports System.Runtime.CompilerServices
 Imports Pretty_Printer
 
 Module Program
-    Sub Main(args As String())
-        Dim PrettyPrinter = New PrettyPrinter With {
-            .BackgroundColour = Color.Blue
-        }
-        PrettyPrinter.PrintLine("Blue background")
-        PrettyPrinter.PrintLine($"{Console.BackgroundColor} = {ConsoleColor.Blue}")
+	Sub Main(args As String())
+		
+	dim p =new 	PrettyPrinter()
+		p.BackgroundColour = New Color().Blue
+		p.PrintLine(Environment.CurrentDirectory)
 
-        PrettyPrinter.Reset()
-        PrettyPrinter.PrintLine(Console.BackgroundColor.ToString & " or is it " & PrettyPrinter.BackgroundColour.ToString)
+		Dim getStdHandle As Integer = WindowsConsoleAPI.GetStdHandle(WindowsConsoleAPI.StdHandles.STD_INPUT_HANDLE)
+		Console.WriteLine(getStdHandle)
 
-        PrettyPrinter.BackgroundColour = Color.FromArgb(Color.Peru.ToArgb)
-        PrettyPrinter.PrintLine("Wow you're smart")
-        PrettyPrinter.PrintLine("Ok i can't see stop")
+		Dim out
 
-        PrettyPrinter.BackgroundColour = Nothing
-        PrettyPrinter.PrintLine("ok better")
+		dim consoleMode = windowsConsoleAPI.getConsoleMode(getStdHandle, out)
+		Console.WriteLine($"{consoleMode} - {out}")
+
+		dim setMode = windowsConsoleAPI.setConsoleMode(getStdHandle,
+		                                      WindowsConsoleAPI.ConsoleModes.ENABLE_VIRTUAL_TERMINAL_PROCESSING or   WindowsConsoleAPI.ConsoleModes.ENABLE_PROCESSED_OUTPUT or      WindowsConsoleAPI.ConsoleModes.ENABLE_VIRTUAL_TERMINAL_PROCESSING)
+		console.WriteLine($"{setMode} - ")
 
 
-        PrettyPrinter.TextColour = Color.Aquamarine
-        PrettyPrinter.PrintLine("Isn' aquaMARriineeeeee")
+		console.WriteLine($"{PrettyPrinter.SequenceStart}32m")
+		
+		
+		Console.WriteLine(WindowsConsoleAPI.GetLastError)
 
-        PrettyPrinter.TextColour = Color.FromArgb(25, 90, 87)
-        PrettyPrinter.PrintLine("Well that wasssssss a colour"
-                             )
-        PrettyPrinter.TextColour = Nothing
-        PrettyPrinter.PrintLine("Ah back to the way things should")
-    End Sub
+
+		Dim enums = New List(Of String)
+		For Each value As WindowsConsoleAPI.ConsoleModes In [Enum].GetValues(out.[GetType]())
+			If out.HasFlag(value) Then
+				enums.Add([Enum].GetName(value))
+			End If
+		Next
+
+		enums.ForEach(Sub(e) Console.WriteLine(e))
+	End Sub
 End Module
