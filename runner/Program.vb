@@ -40,6 +40,7 @@ Module Program
 		prettyPrinter.Print("Well let's do something for the one line", Color.Beige, Color.FromArgb(123))
 		prettyPrinter.PrintLine(" ___ Impressive but let's try state maintenance?")
 		prettyPrinter.PrintLine("Well colour this on for size🌠🌠🌠🌠🌃", Color.Black, Color.Cornsilk)
-
+		prettyPrinter.PrintLine("Ok finew razzle the ****dazzle**** off of me")
+		prettyPrinter.PrintLine($"{vbCrLf}LEVELED UP AND UNDERLINED", textColour:=Color.Azure, underline:=True)
 	End Sub
 End Module

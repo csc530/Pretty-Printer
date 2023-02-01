@@ -72,11 +72,11 @@ Public Class PrettyPrinter
 				Case ConsoleVirtualTerminalSequences.ViewportPositioning
 					Exit Select
 				Case ConsoleVirtualTerminalSequences.TextUnderline
-					If	Underline = false then
-						sequences.append(24)
-						ConsoleModifications.remove(ConsoleVirtualTerminalSequences.TextUnderline)
-						else
-							sequences.append(4)
+					If Underline = False Then
+						sequences.Append(24)
+						ConsoleModifications.Remove(ConsoleVirtualTerminalSequences.TextUnderline)
+					Else
+						sequences.append(4)
 					End If
 					sequences.Append("m"c)
 					Exit Select
@@ -157,19 +157,19 @@ Public Class PrettyPrinter
 		ConsoleModifications = New HashSet(Of ConsoleVirtualTerminalSequences)
 
 		' other enum values said they weren't in use 🤷🏿‍♂️
-		if not PlatformId.Win32NT = environment.OSVersion.Platform then
-			exit sub
-		End If
+		If PlatformID.Win32NT = Environment.OSVersion.Platform Then
 
-		'? Enable virtual terminal sequences
-		Dim stdHandle = WindowsConsoleAPI.GetStdHandle(WindowsConsoleAPI.StdHandles.STD_INPUT_HANDLE)
-		Dim out as WindowsConsoleAPI.ConsoleModes
-		windowsConsoleAPI.getConsoleMode(stdHandle, out)
-		Const virtualConsoleModes = WindowsConsoleAPI.ConsoleModes.ENABLE_VIRTUAL_TERMINAL_PROCESSING or
-		                            WindowsConsoleAPI.ConsoleModes.ENABLE_PROCESSED_OUTPUT
-		If Not out.HasFlag(virtualConsoleModes) AndAlso Not windowsConsoleAPI.setConsoleMode(stdHandle, virtualConsoleModes) _
-			Then
-			Throw new SystemException("Unable to initialize virtual console sequences")
+
+			'? Enable virtual terminal sequences
+			Dim stdHandle = WindowsConsoleAPI.GetStdHandle(WindowsConsoleAPI.StdHandles.STD_INPUT_HANDLE)
+			Dim out As WindowsConsoleAPI.ConsoleModes
+			windowsConsoleAPI.getConsoleMode(stdHandle, out)
+			Const virtualConsoleModes = WindowsConsoleAPI.ConsoleModes.ENABLE_VIRTUAL_TERMINAL_PROCESSING Or
+									WindowsConsoleAPI.ConsoleModes.ENABLE_PROCESSED_OUTPUT
+			If Not out.HasFlag(virtualConsoleModes) AndAlso Not windowsConsoleAPI.setConsoleMode(stdHandle, virtualConsoleModes) _
+				Then
+				Throw New NotSupportedException("Unable to initialize virtual console sequences")
+			End If
 		End If
 	End Sub
 
@@ -193,23 +193,25 @@ Public Class PrettyPrinter
 
 #Region "Print"
 
-	Sub PrintLine(value As String, Optional background as Color = nothing, Optional text as Color = nothing)
-		Print(value & Environment.NewLine, background, text)
+	Public Sub PrintLine(value As String, Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing, Optional underline As Boolean = False)
+		Print(value & Environment.NewLine, backgroundColour, textColour, underline)
 	End Sub
 
 	Sub PrintLine(value As String)
 		Print(value & Environment.NewLine)
 	End Sub
 
-	Sub Print(value As String, Optional background As Color = Nothing, Optional text As Color = Nothing)
+	Sub Print(value As String, Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing, Optional underline As Boolean = False)
 
-		Dim previous = (BackgroundColour, TextColour)
-		BackgroundColour = background
-		TextColour = text
+		Dim previous = (Me.BackgroundColour, Me.TextColour, underline)
+		Me.BackgroundColour = backgroundColour
+		Me.TextColour = textColour
+		Me.Underline = underline
 		Print(value)
 		' ? used to prevent modification of the modifications set
-		BackgroundColour = previous.BackgroundColour
-		TextColour = previous.TextColour
+		Me.BackgroundColour = previous.BackgroundColour
+		Me.TextColour = previous.TextColour
+		Me.Underline = previous.underline
 	End Sub
 
 	Sub Print(value As String)
