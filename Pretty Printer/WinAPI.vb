@@ -3,13 +3,7 @@
 ''' 
 ''' <seealso cref="https://learn.microsoft.com/en-us/windows/console/classic-vs-vt#definitions">
 ''' </summary>
-Public Class WindowsConsoleAPI
-	' Defines the MessageBox function.
-	Declare Auto Function MessageBox Lib "user32.dll"(
-		ByVal hWnd As Integer, ByVal txt As String,
-		ByVal caption As String, ByVal Type As Integer
-		) As Integer
-
+Public  NotInheritable Class WindowsConsoleAPI
 	Declare Auto Function GetLastError Lib "Kernel32.dll"() As Integer
 
 	' From https://learn.microsoft.com/en-us/windows/console/getconsolemode

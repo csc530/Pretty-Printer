@@ -47,7 +47,7 @@ Public Class PrettyPrinter
 		'https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#viewport-positioning
 		ViewportPositioning
 		'https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#text-modification
-		TextModification
+		TextUnderline
 		'https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#text-formatting
 		TextBackground
 		TextColour
@@ -71,11 +71,18 @@ Public Class PrettyPrinter
 					Exit Select
 				Case ConsoleVirtualTerminalSequences.ViewportPositioning
 					Exit Select
-				Case ConsoleVirtualTerminalSequences.TextModification
+				Case ConsoleVirtualTerminalSequences.TextUnderline
+					If	Underline = false then
+						sequences.append(24)
+						ConsoleModifications.remove(ConsoleVirtualTerminalSequences.TextUnderline)
+						else
+							sequences.append(4)
+					End If
+					sequences.Append("m"c)
 					Exit Select
 				Case ConsoleVirtualTerminalSequences.TextBackground
 					If BackgroundColour = Nothing Then
-						sequences.Append("49")
+						sequences.Append(49)
 						ConsoleModifications.Remove(ConsoleVirtualTerminalSequences.TextBackground)
 					Else
 						sequences.Append($"48;2;{BackgroundColour.R};{BackgroundColour.G};{BackgroundColour.B}")
@@ -100,6 +107,18 @@ Public Class PrettyPrinter
 		Next
 		Return sequences.ToString()
 	End Function
+
+	Private _underline as boolean
+	public Property	Underline as boolean
+		get 
+			return _underline
+		End get
+		Set
+			_underline = value
+			ConsoleModifications.Add(ConsoleVirtualTerminalSequences.TextUnderline)
+		End Set
+	End Property
+	
 
 	Private _backgroundColour As Color
 
@@ -159,6 +178,7 @@ Public Class PrettyPrinter
 	Sub Reset()
 		BackgroundColour = Nothing
 		TextColour = Nothing
+		Underline = false
 
 		Console.Write(GetVirtualSequences)
 	End Sub

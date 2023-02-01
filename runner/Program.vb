@@ -5,8 +5,8 @@ Imports Pretty_Printer
 Module Program
 	Sub Main(args As String())
 		Dim prettyPrinter = New PrettyPrinter With {
-			    .BackgroundColour = Color.Blue
-			    }
+				.BackgroundColour = Color.Blue
+				}
 		prettyPrinter.PrintLine("Blue background")
 		prettyPrinter.PrintLine($"{Console.BackgroundColor} = {ConsoleColor.Blue}")
 
@@ -24,9 +24,15 @@ Module Program
 		prettyPrinter.TextColour = Color.Aquamarine
 		prettyPrinter.PrintLine("Isn' aquaMARriineeeeee")
 
+		prettyPrinter.Underline = True
+		Dim t = False
+		prettyPrinter.Print(t.ToString())
+		t = Nothing
+		prettyPrinter.PrintLine(t.ToString())
+		prettyPrinter.Underline = False
+
 		prettyPrinter.TextColour = Color.FromArgb(25, 90, 87)
-		prettyPrinter.PrintLine("Well that wasssssss a colour"
-		                        )
+		prettyPrinter.PrintLine("Well that wasssssss a colour")
 		prettyPrinter.TextColour = Nothing
 		prettyPrinter.PrintLine("Ah back to the way things should")
 	End Sub
