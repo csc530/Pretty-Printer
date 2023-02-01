@@ -1,3 +1,7 @@
 ﻿# Pretty Printer
 
-An extended console utiility to print things 💫P R E T T Y L Y✨
+An extended console utility to print things 💫P R E T T Y L Y✨
+
+## TODOS☑️
+
+- [ ] test on additional platforms and terminals 

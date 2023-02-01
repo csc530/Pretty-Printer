@@ -1,41 +1,33 @@
 Imports System
 Imports System.Drawing
-Imports System.Runtime.CompilerServices
 Imports Pretty_Printer
 
 Module Program
 	Sub Main(args As String())
-		
-	dim p =new 	PrettyPrinter()
-		p.BackgroundColour = New Color().Blue
-		p.PrintLine(Environment.CurrentDirectory)
+		Dim prettyPrinter = New PrettyPrinter With {
+			    .BackgroundColour = Color.Blue
+			    }
+		prettyPrinter.PrintLine("Blue background")
+		prettyPrinter.PrintLine($"{Console.BackgroundColor} = {ConsoleColor.Blue}")
 
-		Dim getStdHandle As Integer = WindowsConsoleAPI.GetStdHandle(WindowsConsoleAPI.StdHandles.STD_INPUT_HANDLE)
-		Console.WriteLine(getStdHandle)
+		prettyPrinter.Reset()
+		prettyPrinter.PrintLine(Console.BackgroundColor.ToString & " or is it " & prettyPrinter.BackgroundColour.ToString)
 
-		Dim out
+		prettyPrinter.BackgroundColour = Color.FromArgb(Color.Peru.ToArgb)
+		prettyPrinter.PrintLine("Wow you're smart")
+		prettyPrinter.PrintLine("Ok i can't see stop")
 
-		dim consoleMode = windowsConsoleAPI.getConsoleMode(getStdHandle, out)
-		Console.WriteLine($"{consoleMode} - {out}")
-
-		dim setMode = windowsConsoleAPI.setConsoleMode(getStdHandle,
-		                                      WindowsConsoleAPI.ConsoleModes.ENABLE_VIRTUAL_TERMINAL_PROCESSING or   WindowsConsoleAPI.ConsoleModes.ENABLE_PROCESSED_OUTPUT or      WindowsConsoleAPI.ConsoleModes.ENABLE_VIRTUAL_TERMINAL_PROCESSING)
-		console.WriteLine($"{setMode} - ")
-
-
-		console.WriteLine($"{PrettyPrinter.SequenceStart}32m")
-		
-		
-		Console.WriteLine(WindowsConsoleAPI.GetLastError)
+		prettyPrinter.BackgroundColour = Nothing
+		prettyPrinter.PrintLine("ok better")
 
 
-		Dim enums = New List(Of String)
-		For Each value As WindowsConsoleAPI.ConsoleModes In [Enum].GetValues(out.[GetType]())
-			If out.HasFlag(value) Then
-				enums.Add([Enum].GetName(value))
-			End If
-		Next
+		prettyPrinter.TextColour = Color.Aquamarine
+		prettyPrinter.PrintLine("Isn' aquaMARriineeeeee")
 
-		enums.ForEach(Sub(e) Console.WriteLine(e))
+		prettyPrinter.TextColour = Color.FromArgb(25, 90, 87)
+		prettyPrinter.PrintLine("Well that wasssssss a colour"
+		                        )
+		prettyPrinter.TextColour = Nothing
+		prettyPrinter.PrintLine("Ah back to the way things should")
 	End Sub
 End Module
