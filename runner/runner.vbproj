@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Colorful.Console" Version="1.2.15" />
+    <PackageReference Include="DL.PrettyText.NET" Version="1.0.1" />
+    <PackageReference Include="PrettyPrompt" Version="4.0.4" />
+    <PackageReference Include="System.Console" Version="4.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Pretty Printer\Pretty Printer.vbproj" />
   </ItemGroup>
 

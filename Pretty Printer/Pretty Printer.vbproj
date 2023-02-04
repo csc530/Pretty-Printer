@@ -3,6 +3,26 @@
   <PropertyGroup>
     <RootNamespace>Pretty_Printer</RootNamespace>
     <TargetFramework>net7.0</TargetFramework>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+    <OptionStrict>On</OptionStrict>
+    <Description>Utility class for console operations. Mainly for adding custom colours to the fore and background beyond the set ConsoleColours.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/csc530/Pretty-Printer</RepositoryUrl>
+    <PackageTags>console;pretty;colour output;console utility</PackageTags>
+    <NeutralLanguage>en-CA</NeutralLanguage>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <Title>Pretty Printer</Title>
+    <Authors>csc530</Authors>
+    <Version>1.0.0-alpha</Version>
+    <PackageReleaseNotes>First release basic/main functionality</PackageReleaseNotes>
+    <PackageId>csc530-Pretty-Console</PackageId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
