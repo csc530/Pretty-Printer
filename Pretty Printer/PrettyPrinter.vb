@@ -3,8 +3,8 @@ Option Strict On
 Imports System.Drawing
 Imports System.Text
 
-Public Class PrettyPrinter
-	Enum Colour
+Public Class Console
+	private Enum Colour
 		None
 		Black
 		Red
