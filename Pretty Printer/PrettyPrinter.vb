@@ -2,6 +2,7 @@ Option Strict On
 
 Imports System.Drawing
 Imports System.Text
+Imports System.Threading
 
 Public Class Console
 	private Enum Colour
@@ -18,7 +19,7 @@ Public Class Console
 	End Enum
 
 	<Flags>
-	Enum ColourModifier
+	private Enum ColourModifier
 		'Returns all attributes To the Default state prior To modification
 		None = 0
 		'Applies brightness/intensity flag To foreground color
@@ -53,7 +54,7 @@ Public Class Console
 		TextColour
 	End Enum
 
-	Public shared ReadOnly SequenceStart As String = $"{Convert.ToChar(ConsoleKey.Escape)}["
+	Public Shared ReadOnly SequenceStart As String = $"{Convert.ToChar(ConsoleKey.Escape)}["
 	Private Property ConsoleModifications() As HashSet(Of ConsoleVirtualTerminalSequences)
 
 	Private Function GetVirtualSequences() As String
@@ -62,24 +63,24 @@ Public Class Console
 			sequences.Append(SequenceStart)
 			Select Case sequence
 				Case ConsoleVirtualTerminalSequences.SimpleCursorPositioning
-					Exit Select
+
 				Case ConsoleVirtualTerminalSequences.CursorPositioning
-					Exit Select
+
 				Case ConsoleVirtualTerminalSequences.CursorVisibility
-					Exit Select
+
 				Case ConsoleVirtualTerminalSequences.CursorShape
-					Exit Select
+
 				Case ConsoleVirtualTerminalSequences.ViewportPositioning
-					Exit Select
+
 				Case ConsoleVirtualTerminalSequences.TextUnderline
-					If Underline = False Then
+					If Not Underline Then
 						sequences.Append(24)
 						ConsoleModifications.Remove(ConsoleVirtualTerminalSequences.TextUnderline)
 					Else
-						sequences.append(4)
+						sequences.Append(4)
 					End If
 					sequences.Append("m"c)
-					Exit Select
+
 				Case ConsoleVirtualTerminalSequences.TextBackground
 					If BackgroundColour = Nothing Then
 						sequences.Append(49)
@@ -88,7 +89,7 @@ Public Class Console
 						sequences.Append($"48;2;{BackgroundColour.R};{BackgroundColour.G};{BackgroundColour.B}")
 					End If
 					sequences.Append("m"c)
-					Exit Select
+
 				Case ConsoleVirtualTerminalSequences.TextColour
 					If TextColour = Nothing Then
 						sequences.Append(39)
@@ -97,28 +98,29 @@ Public Class Console
 						sequences.Append($"38;2;{TextColour.R};{TextColour.G};{TextColour.B}")
 					End If
 					sequences.Append("m"c)
-					Exit Select
+
 				Case Else
 					sequences.Remove(sequences.Length - SequenceStart.Length, SequenceStart.Length)
 					'                    My.Application.Log can`t find log on `my`
-					Exit Select
+
 
 			End Select
 		Next
 		Return sequences.ToString()
 	End Function
-	
-	Private _underline as boolean
-	public Property	Underline as boolean
-		get 
-			return _underline
-		End get
+
+	Private _underline As Boolean
+
+	Public Property Underline As Boolean
+		Get
+			Return _underline
+		End Get
 		Set
-			_underline = value
+			_underline = Value
 			ConsoleModifications.Add(ConsoleVirtualTerminalSequences.TextUnderline)
 		End Set
 	End Property
-	
+
 
 	Private _backgroundColour As Color
 
@@ -153,20 +155,22 @@ Public Class Console
 	End Property
 
 
+	'''
+	''' <summary>Creates a pretty console object that writes to <see cref="System.Console"/> output</summary>
+	''' <exception cref="NotSupportedException">If the environment console does not support Virtual Terminal Sequences<seealso cref="https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences"/></exception>
+	''' 
 	Sub New()
 		ConsoleModifications = New HashSet(Of ConsoleVirtualTerminalSequences)
-
 		' other enum values said they weren't in use 🤷🏿‍♂️
 		If PlatformID.Win32NT = Environment.OSVersion.Platform Then
 
-
 			'? Enable virtual terminal sequences
-			Dim stdHandle = WindowsConsoleAPI.GetStdHandle(WindowsConsoleAPI.StdHandles.STD_INPUT_HANDLE)
-			Dim out As WindowsConsoleAPI.ConsoleModes
-			windowsConsoleAPI.getConsoleMode(stdHandle, out)
-			Const virtualConsoleModes = WindowsConsoleAPI.ConsoleModes.ENABLE_VIRTUAL_TERMINAL_PROCESSING Or
-									WindowsConsoleAPI.ConsoleModes.ENABLE_PROCESSED_OUTPUT
-			If Not out.HasFlag(virtualConsoleModes) AndAlso Not windowsConsoleAPI.setConsoleMode(stdHandle, virtualConsoleModes) _
+			Dim stdHandle = WindowsConsoleApi.GetStdHandle(WindowsConsoleApi.StdHandles.StdInputHandle)
+			Dim out As WindowsConsoleApi.ConsoleModes
+			WindowsConsoleApi.GetConsoleMode(stdHandle, out)
+			Const virtualConsoleModes = WindowsConsoleApi.ConsoleModes.EnableVirtualTerminalProcessing Or
+			                            WindowsConsoleApi.ConsoleModes.EnableProcessedOutput
+			If Not out.HasFlag(virtualConsoleModes) AndAlso Not WindowsConsoleApi.SetConsoleMode(stdHandle, virtualConsoleModes) _
 				Then
 				Throw New NotSupportedException("Unable to initialize virtual console sequences")
 			End If
@@ -180,20 +184,21 @@ Public Class Console
 		TextColour = Nothing
 		Underline = False
 
-		Console.Write(GetVirtualSequences)
+		System.Console.Write(GetVirtualSequences)
 	End Sub
 
 	''' <summary>
 	''' Clears console window of outputs
 	''' </summary>
 	Sub Clear()
-		Console.Clear()
+		System.Console.Clear()
 	End Sub
 
 
 #Region "Print"
 
-	Public Sub PrintLine(value As String, Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing, Optional underline As Boolean = False)
+	Public Sub PrintLine(value As String, Optional backgroundColour As Color = Nothing,
+		Optional textColour As Color = Nothing, Optional underline As Boolean = False)
 		Print(value & Environment.NewLine, backgroundColour, textColour, underline)
 	End Sub
 
@@ -201,21 +206,87 @@ Public Class Console
 		Print(value & Environment.NewLine)
 	End Sub
 
-	Sub Print(value As String, Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing, Optional underline As Boolean = False)
+	Sub Print(value As String, Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing,
+		Optional underline As Boolean = False)
 
 		Dim previous = (Me.BackgroundColour, Me.TextColour, underline)
 		Me.BackgroundColour = backgroundColour
 		Me.TextColour = textColour
 		Me.Underline = underline
 		Print(value)
-		' ? used to prevent modification of the modifications set
+		' ? revert back to original values
 		Me.BackgroundColour = previous.BackgroundColour
 		Me.TextColour = previous.TextColour
 		Me.Underline = previous.underline
 	End Sub
 
 	Sub Print(value As String)
-		Console.Write(GetVirtualSequences() & value)
+		System.Console.Write(GetVirtualSequences() & value)
+	End Sub
+
+	Public Enum PrintUnit
+		Character
+		Word
+		Line
+	End Enum
+
+	''' <summary>
+	''' Print to the console at a set speed; imitates typing text
+	''' </summary>
+	''' <param name="value">The value to print</param>
+	''' <param name="speed">The speed as <paramref name="unitOfSpeed">units</paramref> per second</param>
+	''' <param name="newLine">if set to <c>true</c> appends a newline character to the end of the text.</param>
+	''' <param name="backgroundColour">The background colour.</param>
+	''' <param name="textColour">The text colour.</param>
+	''' <param name="underline">if set to <c>true</c> underlines the text.</param>
+	''' <param name="unitOfSpeed">The unit to print per second.</param>
+	Sub SlowPrint(value As String, Optional speed As Integer = 15, Optional newLine As Boolean = True,
+		Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing,
+		Optional underline As Boolean = False, Optional unitOfSpeed As PrintUnit = PrintUnit.Character)
+		' * made it blocking as if they try to print or modify the classes values not errors are thrown, sry🤷🏿‍♂️
+		Select Case unitOfSpeed
+			Case PrintUnit.Character
+				' i.e. the x^-1 inverse because were' sleeping it and not setting the speed
+				' ex. speed 2chars/sec => sleep = 500 = half a second not 2000 = 4chars/sec
+				' by 1000 to convert to milliseconds
+				speed = Convert.ToInt32(Math.Round(1000/speed, 0))
+
+
+			Case PrintUnit.Line
+				For Each line In value.Split(Environment.NewLine)
+					' simply put; we want to print out chars per second with the unit chars duh🙄
+					SlowPrint(line, line.Length, newLine, backgroundColour, textColour, underline, PrintUnit.Character)
+				Next
+				Exit Sub
+			Case PrintUnit.Word
+				For Each word In value.Split(" ")
+					SlowPrint(word & " ", word.Length, newLine, backgroundColour, textColour, underline, PrintUnit.Character)
+				Next
+				exit sub
+		End Select
+
+
+		If newLine Then
+			value &= Environment.NewLine
+		End If
+
+		Dim character As Char
+		For index = 0 To value.Length - 1
+			character = value(index)
+			Print(character, backgroundColour, textColour, underline)
+			If _
+				index + 1 < value.Length AndAlso
+				(Environment.NewLine = value(index + 1) OrElse value(index + 1) = vbCrLf OrElse value(index + 1) = vbLf) Then
+				Print(value(index + 1), backgroundColour, textColour, underline)
+				index += 1
+				'todo change cursor to underline just not block makes newline jump jarring
+				If index + 1 <> value.Length - 1 Then
+					Thread.Sleep(Convert.ToInt32((285*speed/67)))
+				End If
+			Else
+				Thread.Sleep(speed)
+			End If
+		Next
 	End Sub
 
 
