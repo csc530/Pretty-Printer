@@ -291,10 +291,12 @@ Public Class Console
 
 	Public Sub AlternatePrintLine(value As String, Optional textcolours As List(Of Color) = Nothing,
 		Optional backgroundColours As List(Of Color) = Nothing)
-		AlternatePrint(value & Environment.NewLine, textcolours, backgroundColours)
+		alternatePrint(value & Environment.NewLine, textcolours, backgroundColours)
 	End Sub
+
+
 	Public Sub AlternatePrint(value As String, Optional textcolours As List(Of Color) = Nothing,
-		Optional backgroundColours As List(Of Color) = Nothing)
+		Optional backgroundColours As List(Of Color) = Nothing, Optional textFrequency As Integer = 1, Optional textUnit As PrintUnit = PrintUnit.Character, Optional backgroundFrequency As Integer = 1, Optional backgruondUnit As PrintUnit = PrintUnit.Character)
 		REM option
 		If (textcolours Is Nothing OrElse textcolours.Count = 0) AndAlso (backgroundColours Is Nothing OrElse backgroundColours.Count = 0) Then
 			Print(value)
@@ -305,11 +307,35 @@ Public Class Console
 			If backgroundColours Is Nothing Then
 				backgroundColours = New List(Of Color) From {(BackgroundColour)}
 			End If
+			'todo remove space/invisble characters from contributing ti akternate
+			If textFrequency = 1 AndAlso backgroundFrequency = 1 Then
+				alternatePrint(value, textcolours, backgroundColours)
+			Else
+				customalternateprint(value, textcolours, textFrequency, textUnit, backgroundColours, backgroundFrequency, backgruondUnit)
+			End If
 
-			For index = 0 To value.Length - 1
-				Print(value(index), backgroundColours(index Mod backgroundColours.Count), textcolours(index Mod textcolours.Count))
-			Next
 		End If
+	End Sub
+
+	Private Sub customalternateprint(value As String, textcolours As List(Of Color), textFrequency As Integer, textUnit As PrintUnit, backgroundColours As List(Of Color), backgroundFrequency As Integer, backgruondUnit As PrintUnit)
+		'todo add select units
+		Dim bgColour = (0)
+		Dim txtColour = 0
+		For index = 0 To value.Length - 1
+			If index Mod textFrequency = 0 Then
+				txtColour += 1
+			End If
+			If index Mod backgroundFrequency = 0 Then
+				bgColour += 1
+			End If
+			Print(value(index), backgroundColours(bgColour Mod backgroundColours.Count), textcolours(txtColour Mod textcolours.Count))
+		Next
+	End Sub
+
+	Private Sub alternatePrint(value As String, textcolours As List(Of Color), backgroundColours As List(Of Color))
+		For index = 0 To value.Length - 1
+			Print(value(index), backgroundColours(index Mod backgroundColours.Count), textcolours(index Mod textcolours.Count))
+		Next
 	End Sub
 
 #End Region

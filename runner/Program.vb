@@ -5,13 +5,14 @@ Module Program
 	Private ReadOnly Pretty As Pretty_Printer.Console = New Console()
 
 	Function Main(args As String()) As Integer
+
 		TestAlternatePrint()
 		Return 0
 	End Function
 
 	Private Sub TestAlternatePrint()
 		Pretty.AlternatePrint("Hey so this is cool", {Color.RebeccaPurple, Color.PowderBlue}.ToList, {Color.AliceBlue}.ToList)
-		Pretty.AlternatePrint("But does it realllly work", {Color.RebeccaPurple, Color.PowderBlue}.ToList,)
+		Pretty.AlternatePrint("But does it realllly work", {Color.RebeccaPurple, Color.PowderBlue}.ToList, textFrequency:=5)
 		Pretty.AlternatePrint("Hey so this is cool", backgroundColours:={Color.RebeccaPurple, Color.PowderBlue}.ToList)
 
 	End Sub
