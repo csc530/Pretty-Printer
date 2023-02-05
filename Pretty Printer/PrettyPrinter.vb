@@ -230,6 +230,12 @@ Public Class Console
 		Line
 	End Enum
 
+	Sub SlowPrintLine(value As String, Optional speed As Integer = 15,
+		Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing,
+		Optional underline As Boolean = False, Optional unitOfSpeed As PrintUnit = PrintUnit.Character)
+		SlowPrint(value & Environment.NewLine, speed, backgroundColour, textColour, underline, unitOfSpeed)
+	End Sub
+
 	''' <summary>
 	''' Print to the console at a set speed; imitates typing text
 	''' </summary>
@@ -240,7 +246,7 @@ Public Class Console
 	''' <param name="textColour">The text colour.</param>
 	''' <param name="underline">if set to <c>true</c> underlines the text.</param>
 	''' <param name="unitOfSpeed">The unit to print per second.</param>
-	Sub SlowPrint(value As String, Optional speed As Integer = 15, Optional newLine As Boolean = True,
+	Sub SlowPrint(value As String, Optional speed As Integer = 15,
 		Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing,
 		Optional underline As Boolean = False, Optional unitOfSpeed As PrintUnit = PrintUnit.Character)
 		' * made it blocking as if they try to print or modify the classes values not errors are thrown, sry🤷🏿‍♂️
@@ -250,26 +256,20 @@ Public Class Console
 				' ex. speed 2chars/sec => sleep = 500 = half a second not 2000 = 4chars/sec
 				' by 1000 to convert to milliseconds
 				speed = Convert.ToInt32(Math.Round(1000 / speed, 0))
-
-
+				_printSlow(value, speed, backgroundColour, textColour, underline)
 			Case PrintUnit.Line
 				For Each line In value.Split(Environment.NewLine)
 					' simply put; we want to print out chars per second with the unit chars duh🙄
-					SlowPrint(line, line.Length, newLine, backgroundColour, textColour, underline, PrintUnit.Character)
+					SlowPrint(line, line.Length, backgroundColour, textColour, underline, PrintUnit.Character)
 				Next
-				Exit Sub
 			Case PrintUnit.Word
 				For Each word In value.Split(" ")
-					SlowPrint(word & " ", word.Length, newLine, backgroundColour, textColour, underline, PrintUnit.Character)
+					SlowPrint(word & " ", word.Length, backgroundColour, textColour, underline, PrintUnit.Character)
 				Next
-				Exit Sub
 		End Select
+	End Sub
 
-
-		If newLine Then
-			value &= Environment.NewLine
-		End If
-
+	Private Sub _printSlow(value As String, speed As Integer, backgroundColour As Color, textColour As Color, underline As Boolean)
 		Dim character As Char
 		For index = 0 To value.Length - 1
 			character = value(index)
@@ -288,8 +288,6 @@ Public Class Console
 			End If
 		Next
 	End Sub
-
-
 
 	Public Sub AlternatePrintLine(value As String, Optional textcolours As List(Of Color) = Nothing,
 		Optional backgroundColours As List(Of Color) = Nothing)
