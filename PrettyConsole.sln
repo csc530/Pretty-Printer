@@ -3,30 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Pretty Printer", "Pretty Printer\Pretty Printer.vbproj", "{3B5B92BC-801E-470F-972C-879109315F57}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Pretty Printer", "Pretty Printer\Pretty Printer.vbproj", "{3B5B92BC-801E-470F-972C-879109315F57}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Pretty Test Printer", "Pretty Test Printer\Pretty Test Printer.vbproj", "{E8DDF16E-60EF-4D07-B4D9-6F173697967D}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "runner", "runner\runner.vbproj", "{6318BEC7-14A6-4E0B-B0E1-39AE01072042}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "runner", "runner\runner.vbproj", "{6318BEC7-14A6-4E0B-B0E1-39AE01072042}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Test Pretty Console", "Test Pretty Console\Test Pretty Console\Test Pretty Console.vbproj", "{BBF1041D-F507-45AD-A870-85191B37AE3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Description = A class library to display a variety of output styles to the console
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3B5B92BC-801E-470F-972C-879109315F57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B5B92BC-801E-470F-972C-879109315F57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B5B92BC-801E-470F-972C-879109315F57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B5B92BC-801E-470F-972C-879109315F57}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8DDF16E-60EF-4D07-B4D9-6F173697967D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8DDF16E-60EF-4D07-B4D9-6F173697967D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8DDF16E-60EF-4D07-B4D9-6F173697967D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8DDF16E-60EF-4D07-B4D9-6F173697967D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6318BEC7-14A6-4E0B-B0E1-39AE01072042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6318BEC7-14A6-4E0B-B0E1-39AE01072042}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6318BEC7-14A6-4E0B-B0E1-39AE01072042}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6318BEC7-14A6-4E0B-B0E1-39AE01072042}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBF1041D-F507-45AD-A870-85191B37AE3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBF1041D-F507-45AD-A870-85191B37AE3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBF1041D-F507-45AD-A870-85191B37AE3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBF1041D-F507-45AD-A870-85191B37AE3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,7 +5,7 @@ Imports System.Text
 Imports System.Threading
 
 Public Class Console
-	private Enum Colour
+	Private Enum Colour
 		None
 		Black
 		Red
@@ -19,7 +19,7 @@ Public Class Console
 	End Enum
 
 	<Flags>
-	private Enum ColourModifier
+	Private Enum ColourModifier
 		'Returns all attributes To the Default state prior To modification
 		None = 0
 		'Applies brightness/intensity flag To foreground color
@@ -169,7 +169,7 @@ Public Class Console
 			Dim out As WindowsConsoleApi.ConsoleModes
 			WindowsConsoleApi.GetConsoleMode(stdHandle, out)
 			Const virtualConsoleModes = WindowsConsoleApi.ConsoleModes.EnableVirtualTerminalProcessing Or
-			                            WindowsConsoleApi.ConsoleModes.EnableProcessedOutput
+										WindowsConsoleApi.ConsoleModes.EnableProcessedOutput
 			If Not out.HasFlag(virtualConsoleModes) AndAlso Not WindowsConsoleApi.SetConsoleMode(stdHandle, virtualConsoleModes) _
 				Then
 				Throw New NotSupportedException("Unable to initialize virtual console sequences")
@@ -249,7 +249,7 @@ Public Class Console
 				' i.e. the x^-1 inverse because were' sleeping it and not setting the speed
 				' ex. speed 2chars/sec => sleep = 500 = half a second not 2000 = 4chars/sec
 				' by 1000 to convert to milliseconds
-				speed = Convert.ToInt32(Math.Round(1000/speed, 0))
+				speed = Convert.ToInt32(Math.Round(1000 / speed, 0))
 
 
 			Case PrintUnit.Line
@@ -262,7 +262,7 @@ Public Class Console
 				For Each word In value.Split(" ")
 					SlowPrint(word & " ", word.Length, newLine, backgroundColour, textColour, underline, PrintUnit.Character)
 				Next
-				exit sub
+				Exit Sub
 		End Select
 
 
@@ -281,7 +281,7 @@ Public Class Console
 				index += 1
 				'todo change cursor to underline just not block makes newline jump jarring
 				If index + 1 <> value.Length - 1 Then
-					Thread.Sleep(Convert.ToInt32((285*speed/67)))
+					Thread.Sleep(Convert.ToInt32((285 * speed / 67)))
 				End If
 			Else
 				Thread.Sleep(speed)
@@ -290,6 +290,30 @@ Public Class Console
 	End Sub
 
 
+
+	Public Sub AlternatePrintLine(value As String, Optional textcolours As List(Of Color) = Nothing,
+		Optional backgroundColours As List(Of Color) = Nothing)
+		AlternatePrint(value & Environment.NewLine, textcolours, backgroundColours)
+	End Sub
+	Public Sub AlternatePrint(value As String, Optional textcolours As List(Of Color) = Nothing,
+		Optional backgroundColours As List(Of Color) = Nothing)
+		REM option
+		If (textcolours Is Nothing OrElse textcolours.Count = 0) AndAlso (backgroundColours Is Nothing OrElse backgroundColours.Count = 0) Then
+			Print(value)
+		Else
+			If textcolours Is Nothing Then
+				textcolours = New List(Of Color) From {(TextColour)}
+			End If
+			If backgroundColours Is Nothing Then
+				backgroundColours = New List(Of Color) From {(BackgroundColour)}
+			End If
+
+			For index = 0 To value.Length - 1
+				Print(value(index), backgroundColours(index Mod backgroundColours.Count), textcolours(index Mod textcolours.Count))
+			Next
+		End If
+	End Sub
+
 #End Region
 
 
@@ -297,7 +321,7 @@ Public Class Console
 		If colour.Name = "0" Then
 			Return False
 		Else
-			Return [Enum].TryParse (Of ConsoleColor)(colour.Name, True, Nothing)
+			Return [Enum].TryParse(Of ConsoleColor)(colour.Name, True, Nothing)
 		End If
 	End Function
 End Class
