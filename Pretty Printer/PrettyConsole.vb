@@ -4,37 +4,8 @@ Imports System.Drawing
 Imports System.Text
 Imports System.Threading
 
-Public Class Console
-	Private Enum Colour
-		None
-		Black
-		Red
-		Green
-		Yellow
-		Blue
-		Magenta
-		Cyan
-		White
-		Bright = 16
-	End Enum
+Public Class PrettyConsole
 
-	<Flags>
-	Private Enum ColourModifier
-		'Returns all attributes To the Default state prior To modification
-		None = 0
-		'Applies brightness/intensity flag To foreground color
-		Bright = 1
-		'Removes brightness/intensity flag from foreground color
-		NoBright = 22
-		'Adds underline
-		Underline = 4
-		'Removes underline
-		NoUnderline = 24
-		'Swaps foreground And background colors
-		Negative = 7
-		'(No negative)	Returns foreground/background To normal
-		Positive = 27
-	End Enum
 
 	Private Enum ConsoleVirtualTerminalSequences
 		'https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#simple-cursor-positioning
@@ -224,11 +195,7 @@ Public Class Console
 		System.Console.Write(GetVirtualSequences() & value)
 	End Sub
 
-	Public Enum PrintUnit
-		Character
-		Word
-		Line
-	End Enum
+
 
 	Sub SlowPrintLine(value As String, Optional speed As Integer = 15,
 		Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing,
