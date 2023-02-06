@@ -137,11 +137,10 @@ Public Class PrettyConsole
 
 			'? Enable virtual terminal sequences
 			Dim stdHandle = WindowsConsoleApi.GetStdHandle(WindowsConsoleApi.StdHandles.StdInputHandle)
-			Dim out As WindowsConsoleApi.ConsoleModes
-			WindowsConsoleApi.GetConsoleMode(stdHandle, out)
-			Const virtualConsoleModes = WindowsConsoleApi.ConsoleModes.EnableVirtualTerminalProcessing Or
-										WindowsConsoleApi.ConsoleModes.EnableProcessedOutput
-			If Not out.HasFlag(virtualConsoleModes) AndAlso Not WindowsConsoleApi.SetConsoleMode(stdHandle, virtualConsoleModes) _
+			Dim consoleMode As WindowsConsoleApi.ConsoleModes
+			WindowsConsoleApi.GetConsoleMode(stdHandle, consoleMode)
+			Const compatibleConsoleModes = WindowsConsoleApi.ConsoleModes.EnableVirtualTerminalProcessing Or WindowsConsoleApi.ConsoleModes.EnableProcessedOutput
+			If Not consoleMode.HasFlag(compatibleConsoleModes) AndAlso Not WindowsConsoleApi.SetConsoleMode(stdHandle, compatibleConsoleModes) _
 				Then
 				Throw New NotSupportedException("Unable to initialize virtual console sequences")
 			End If
@@ -256,14 +255,15 @@ Public Class PrettyConsole
 		Next
 	End Sub
 
+	'todo add select units
+
 	Public Sub AlternatePrintLine(value As String, Optional textcolours As List(Of Color) = Nothing,
 		Optional backgroundColours As List(Of Color) = Nothing)
-		alternatePrint(value & Environment.NewLine, textcolours, backgroundColours)
+		_AlternatePrint(value & Environment.NewLine, textcolours, backgroundColours)
 	End Sub
 
 
-	Public Sub AlternatePrint(value As String, Optional textcolours As List(Of Color) = Nothing,
-		Optional backgroundColours As List(Of Color) = Nothing, Optional textFrequency As Integer = 1, Optional textUnit As PrintUnit = PrintUnit.Character, Optional backgroundFrequency As Integer = 1, Optional backgruondUnit As PrintUnit = PrintUnit.Character)
+	Public Sub AlternatePrint(value As String, Optional textcolours As List(Of Color) = Nothing, Optional backgroundColours As List(Of Color) = Nothing, Optional textFrequency As Integer = 1, Optional backgroundFrequency As Integer = 1)
 		REM option
 		If (textcolours Is Nothing OrElse textcolours.Count = 0) AndAlso (backgroundColours Is Nothing OrElse backgroundColours.Count = 0) Then
 			Print(value)
@@ -274,18 +274,18 @@ Public Class PrettyConsole
 			If backgroundColours Is Nothing Then
 				backgroundColours = New List(Of Color) From {(BackgroundColour)}
 			End If
+
 			'todo remove space/invisble characters from contributing ti akternate
 			If textFrequency = 1 AndAlso backgroundFrequency = 1 Then
-				alternatePrint(value, textcolours, backgroundColours)
+				_AlternatePrint(value, textcolours, backgroundColours)
 			Else
-				customalternateprint(value, textcolours, textFrequency, textUnit, backgroundColours, backgroundFrequency, backgruondUnit)
+				_CustomAlternatePrint(value, textcolours, textFrequency, backgroundColours, backgroundFrequency)
 			End If
 
 		End If
 	End Sub
 
-	Private Sub customalternateprint(value As String, textcolours As List(Of Color), textFrequency As Integer, textUnit As PrintUnit, backgroundColours As List(Of Color), backgroundFrequency As Integer, backgruondUnit As PrintUnit)
-		'todo add select units
+	Private Sub _CustomAlternatePrint(value As String, textcolours As List(Of Color), textFrequency As Integer, backgroundColours As List(Of Color), backgroundFrequency As Integer)
 		Dim bgColour = (0)
 		Dim txtColour = 0
 		For index = 0 To value.Length - 1
@@ -299,7 +299,7 @@ Public Class PrettyConsole
 		Next
 	End Sub
 
-	Private Sub alternatePrint(value As String, textcolours As List(Of Color), backgroundColours As List(Of Color))
+	Private Sub _AlternatePrint(value As String, textcolours As List(Of Color), backgroundColours As List(Of Color))
 		For index = 0 To value.Length - 1
 			Print(value(index), backgroundColours(index Mod backgroundColours.Count), textcolours(index Mod textcolours.Count))
 		Next

@@ -15,7 +15,10 @@
     <Authors>csc530</Authors>
     <Version>1.0.0-alpha</Version>
     <PackageReleaseNotes>First release basic/main functionality</PackageReleaseNotes>
-    <PackageId>csc530-Pretty-Console</PackageId>
+    <PackageId>csc530.PrettyConsole</PackageId>
+    <RepositoryType>git</RepositoryType>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>

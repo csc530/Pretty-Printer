@@ -16,8 +16,8 @@ Global
 		Description = A class library to display a variety of output styles to the console
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3B5B92BC-801E-470F-972C-879109315F57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B5B92BC-801E-470F-972C-879109315F57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B5B92BC-801E-470F-972C-879109315F57}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{3B5B92BC-801E-470F-972C-879109315F57}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{3B5B92BC-801E-470F-972C-879109315F57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B5B92BC-801E-470F-972C-879109315F57}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6318BEC7-14A6-4E0B-B0E1-39AE01072042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

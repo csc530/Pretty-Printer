@@ -1,8 +1,8 @@
 ﻿Imports System.Drawing
-Imports Pretty_Printer
+Imports csc530.Pretty
 
 Module Program
-	Private ReadOnly Pretty As Pretty_Printer.Console = New Console()
+	Private ReadOnly Pretty As csc530.Pretty.PrettyConsole = New PrettyConsole()
 
 	Function Main(args As String()) As Integer
 
@@ -11,17 +11,18 @@ Module Program
 	End Function
 
 	Private Sub TestAlternatePrint()
-		Pretty.AlternatePrint("Hey so this is cool", {Color.RebeccaPurple, Color.PowderBlue}.ToList, {Color.AliceBlue}.ToList)
+		Pretty.AlternatePrintLine("Hey so this is cool", {Color.RebeccaPurple, Color.PowderBlue}.ToList, {Color.AliceBlue}.ToList)
 		Pretty.AlternatePrint("But does it realllly work", {Color.RebeccaPurple, Color.PowderBlue}.ToList, textFrequency:=5)
-		Pretty.AlternatePrint("Hey so this is cool", backgroundColours:={Color.RebeccaPurple, Color.PowderBlue}.ToList)
+		Pretty.AlternatePrintLine("... I guess it do
+Hey so this is cool", backgroundColours:={Color.RebeccaPurple, Color.PowderBlue}.ToList)
 
 	End Sub
 
 	Private Sub TestSlowPrint()
 		Pretty.SlowPrint("Let's slow things down..", 1)
 		Pretty.SlowPrint("Ok that was too slow XD")
-		Pretty.SlowPrint("Let ramp thungs up then", 10, unitOfSpeed:=Console.PrintUnit.Word)
-		Pretty.SlowPrint("Let ramp thungs up then", 1, unitOfSpeed:=Console.PrintUnit.Line)
+		Pretty.SlowPrint("Let ramp thungs up then", 10, unitOfSpeed:=PrettyConsole.PrintUnit.Word)
+		Pretty.SlowPrint("Let ramp thungs up then", 1, unitOfSpeed:=PrettyConsole.PrintUnit.Line)
 	End Sub
 
 	Private Sub TestPrintOverloads()
