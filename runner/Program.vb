@@ -6,23 +6,35 @@ Module Program
 
 	Function Main(args As String()) As Integer
 
+'		TestUnderline()
+'		TestPrintOverloads()
+'		TestSlowPrint()
+'		TestTextColour()
 		TestAlternatePrint()
 		Return 0
 	End Function
 
 	Private Sub TestAlternatePrint()
-		Pretty.AlternatePrintLine("Hey so this is cool", {Color.RebeccaPurple, Color.PowderBlue}.ToList, {Color.AliceBlue}.ToList)
-		Pretty.AlternatePrint("But does it realllly work", {Color.RebeccaPurple, Color.PowderBlue}.ToList, textFrequency:=5)
-		Pretty.AlternatePrintLine("... I guess it do
-Hey so this is cool", backgroundColours:={Color.RebeccaPurple, Color.PowderBlue}.ToList)
-
+		TestSingleColourAlternatePrint()
 	End Sub
+	
+	sub MultiColourAlternate()
+		
+	End sub
+
+	Private sub TestSingleColourAlternatePrint()
+		Pretty.AlternateColourPrint("This is red then blue....", Color.Red, Color.Blue)
+		Pretty.AlternateColourPrintLine("Now it's green back to normal.. :)",Color.Green)
+		
+		Pretty.AlternateBackgroundPrint("Ok now we're switching up the background....",Color.FromArgb(42,18,223),Color.Aquamarine)
+		Pretty.AlternateBackgroundPrintLine("Ok impressive",Color.MediumSpringGreen)
+	End sub
 
 	Private Sub TestSlowPrint()
 		Pretty.SlowPrint("Let's slow things down..", 1)
-		Pretty.SlowPrint("Ok that was too slow XD")
-		Pretty.SlowPrint("Let ramp thungs up then", 10, unitOfSpeed:=PrettyConsole.PrintUnit.Word)
-		Pretty.SlowPrint("Let ramp thungs up then", 1, unitOfSpeed:=PrettyConsole.PrintUnit.Line)
+		Pretty.SlowPrintLine("Ok that was too slow XD")
+		Pretty.SlowPrintLine("Let ramp things up then", 10, unitOfSpeed := PrettyConsole.PrintUnit.Word)
+		Pretty.SlowPrintLine("Let ramp things up then", 1, unitOfSpeed := PrettyConsole.PrintUnit.Line)
 	End Sub
 
 	Private Sub TestPrintOverloads()
