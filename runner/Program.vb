@@ -16,10 +16,15 @@ Module Program
 
 	Private Sub TestAlternatePrint()
 		TestSingleColourAlternatePrint()
+		MultiColourAlternate()
 	End Sub
-	
-	sub MultiColourAlternate()
-		
+
+	Dim rainbow = {Color.Red, Color.Orange, Color.Green, Color.Blue, Color.Indigo, Color.Violet}
+
+	Sub MultiColourAlternate()
+		Pretty.AlternatePrint("Now we can get real radical with our coolours...", rainbow, {Color.Tomato, Color.Thistle, Color.Turquoise})
+		Pretty.AlternatePrintLine("Fine I'll make it  readable...?", rainbow)
+		Pretty.AlternatePrintLine("better, happy, I am look how pretty I am... :D",, rainbow)
 	End sub
 
 	Private sub TestSingleColourAlternatePrint()
