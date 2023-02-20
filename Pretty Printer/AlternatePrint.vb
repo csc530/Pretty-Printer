@@ -1,11 +1,20 @@
 ﻿Imports System.Drawing
 
 Partial Class PrettyConsole
+	''' <summary>
+	''' Print text and new line character to the console while alternating the text's colour each character
+	''' </summary>
+	''' <inheritdoc cref="AlternateColourPrint(String, Color, Color)"/>
 	Public Sub AlternateColourPrintLine(value As String, Optional primaryColour As Color = Nothing, Optional secondaryColour As Color = Nothing)
 		AlternateColourPrint(value & Environment.NewLine, primaryColour, secondaryColour)
 	End Sub
 
-
+	''' <summary>
+	''' Print text to the console while alternating the text's colour each character
+	''' </summary>
+	''' <param name="value">The text to print</param>
+	''' <param name="primaryColour">The first colour of each character</param>
+	''' <param name="secondaryColour">Colour for every other character</param>
 	Public Sub AlternateColourPrint(value As String, Optional primaryColour As Color = Nothing,
 									Optional secondaryColour As Color = Nothing)
 		If primaryColour = secondaryColour Then
@@ -27,12 +36,21 @@ Partial Class PrettyConsole
 		Next
 	End Sub
 
+	''' <summary>
+	''' Print text and new line character to the console while alternating the background text's colour each character 
+	''' </summary>
+	''' <inheritdoc cref="AlternateBackgroundPrint(String, Color, Color)"/>
 	Sub AlternateBackgroundPrintLine(value As String, Optional primaryColour As Color = Nothing,
 									 Optional secondaryColour As Color = Nothing)
 		AlternateBackgroundPrint(value & Environment.NewLine, primaryColour, secondaryColour)
 	End Sub
 
-
+	''' <summary>
+	''' Print text to the console while alternating the background text's colour each character
+	''' </summary>
+	''' <param name="primaryColour">The first colour of the character's background</param>
+	''' <param name="secondaryColour">background colour for every other character</param>
+	''' <inheritdoc cref="AlternateColourPrint(String, Color, Color)"/>
 	Public Sub AlternateBackgroundPrint(value As String, Optional primaryColour As Color = Nothing,
 										Optional secondaryColour As Color = Nothing)
 		If primaryColour = secondaryColour Then
@@ -89,6 +107,16 @@ Partial Class PrettyConsole
 		Next
 	End Sub
 
+	''' <summary>
+	''' Print text to the console while alternating the background and text's colour
+	''' </summary>
+	''' <param name="value">The text to print</param>
+	''' <param name="backgroundColours">The colours to altrernate for the background</param>
+	''' <param name="textColours">The colours to alternate for the text's characters</param>
+	''' <param name="backgroundInterval">The interval per unit to switch to the next background colour</param>
+	''' <param name="backgroundIntervalUnit">The unit to switch the background colour on</param>
+	''' <param name="textInterval">The interval per unit to switch to the next text colour</param>
+	''' <param name="textIntervalUnit">The unit to switch the text colour on</param>
 	Public Sub AlternatePrint(value As String,
 							  Optional backgroundColours As Color() = Nothing,
 							  Optional textColours As Color() = Nothing,
@@ -108,6 +136,10 @@ Partial Class PrettyConsole
 		End If
 	End Sub
 
+	''' <summary>
+	'''  Print text and new line character to the console while alternating the background and text's colour
+	''' </summary>
+	''' <inheritdoc cref="AlternatePrint(String, Color(), Color(), Integer, PrintUnit, Integer, PrintUnit)"/>
 	Public Sub AlternatePrintLine(value As String,
 								  Optional backgroundColours As Color() = Nothing,
 								  Optional textColours As Color() = Nothing,
