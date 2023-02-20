@@ -26,7 +26,6 @@ Public Class PrettyConsole
 	Shared ReadOnly SequenceStart As String = $"{Convert.ToChar(ConsoleKey.Escape)}["
 	Private Property ConsoleModifications As HashSet(Of ConsoleVirtualTerminalSequences)
 
-
 	Private Function GetVirtualSequences() As String
 		Dim sequences = New StringBuilder()
 		For Each sequence In ConsoleModifications
@@ -71,7 +70,7 @@ Public Class PrettyConsole
 
 				Case Else
 					sequences.Remove(sequences.Length - SequenceStart.Length, SequenceStart.Length)
-					'                    My.Application.Log can`t find log on `my`
+					REM My.Application.Log can`t find log on `my`
 
 
 			End Select
@@ -138,7 +137,7 @@ Public Class PrettyConsole
 			Dim consoleMode As WindowsConsoleApi.ConsoleModes
 			WindowsConsoleApi.GetConsoleMode(stdHandle, consoleMode)
 			Const compatibleConsoleModes = WindowsConsoleApi.ConsoleModes.EnableVirtualTerminalProcessing Or
-										   WindowsConsoleApi.ConsoleModes.EnableProcessedOutput
+			                               WindowsConsoleApi.ConsoleModes.EnableProcessedOutput
 			If _
 				Not consoleMode.HasFlag(compatibleConsoleModes) AndAlso
 				Not WindowsConsoleApi.SetConsoleMode(stdHandle, compatibleConsoleModes) _
@@ -149,7 +148,7 @@ Public Class PrettyConsole
 	End Sub
 
 
-	''' <summary>Resets this instance.</summary>
+	''' <summary>Resets this all customization to this console printer</summary>
 	Sub Reset()
 		BackgroundColour = Nothing
 		TextColour = Nothing
@@ -169,7 +168,7 @@ Public Class PrettyConsole
 #Region "Print"
 
 	Public Sub PrintLine(value As String, Optional backgroundColour As Color = Nothing,
-		Optional textColour As Color = Nothing, Optional underline As Boolean = False)
+	                     Optional textColour As Color = Nothing, Optional underline As Boolean = False)
 		Print(value & Environment.NewLine, backgroundColour, textColour, underline)
 	End Sub
 
@@ -178,7 +177,7 @@ Public Class PrettyConsole
 	End Sub
 
 	Sub Print(value As String, Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing,
-		Optional underline As Boolean = False)
+	          Optional underline As Boolean = False)
 
 		Dim previous = (Me.BackgroundColour, Me.TextColour, underline)
 		Me.BackgroundColour = backgroundColour
@@ -197,8 +196,8 @@ Public Class PrettyConsole
 
 
 	Sub SlowPrintLine(value As String, Optional speed As Integer = 15,
-		Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing,
-		Optional underline As Boolean = False, Optional unitOfSpeed As PrintUnit = PrintUnit.Character)
+	                  Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing,
+	                  Optional underline As Boolean = False, Optional unitOfSpeed As PrintUnit = PrintUnit.Character)
 		SlowPrint(value & Environment.NewLine, speed, backgroundColour, textColour, underline, unitOfSpeed)
 	End Sub
 
@@ -212,15 +211,15 @@ Public Class PrettyConsole
 	''' <param name="underline">if set to <c>true</c> underlines the text.</param>
 	''' <param name="unitOfSpeed">The unit to print per second.</param>
 	Sub SlowPrint(value As String, Optional speed As Integer = 15,
-		Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing,
-		Optional underline As Boolean = False, Optional unitOfSpeed As PrintUnit = PrintUnit.Character)
+	              Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing,
+	              Optional underline As Boolean = False, Optional unitOfSpeed As PrintUnit = PrintUnit.Character)
 		' * made it blocking as if they try to print or modify the classes values not errors are thrown, sry🤷🏿‍♂️
 		Select Case unitOfSpeed
 			Case PrintUnit.Character
 				' i.e. the x^-1 inverse because were' sleeping it and not setting the speed
 				' ex. speed 2chars/sec => sleep = 500 = half a second not 2000 = 4chars/sec
 				' by 1000 to convert to milliseconds
-				speed = Convert.ToInt32(Math.Round(1000 / speed, 0))
+				speed = Convert.ToInt32(Math.Round(1000/speed, 0))
 				_printSlow(value, speed, backgroundColour, textColour, underline)
 			Case PrintUnit.Line
 				For Each line In value.Split(Environment.NewLine)
@@ -235,7 +234,7 @@ Public Class PrettyConsole
 	End Sub
 
 	Private Sub _printSlow(value As String, speed As Integer, backgroundColour As Color, textColour As Color,
-		underline As Boolean)
+	                       underline As Boolean)
 		Dim character As Char
 		For index = 0 To value.Length - 1
 			character = value(index)
@@ -247,108 +246,13 @@ Public Class PrettyConsole
 				index += 1
 				'todo change cursor to underline just not block makes newline jump jarring
 				If index + 1 <> value.Length - 1 Then
-					Thread.Sleep(Convert.ToInt32((285 * speed / 67)))
+					Thread.Sleep(Convert.ToInt32((285*speed/67)))
 				End If
 			Else
 				Thread.Sleep(speed)
 			End If
 		Next
 	End Sub
-
-	'todo add select units
-
-	Public Sub AlternateColourPrintLine(value As String, Optional primaryColour As Color = Nothing,
-		Optional secondaryColour As Color = Nothing)
-		AlternateColourPrint(value & Environment.NewLine, primaryColour, secondaryColour)
-	End Sub
-
-
-	Public Sub AlternateColourPrint(value As String, Optional primaryColour As Color = Nothing,
-		Optional secondaryColour As Color = Nothing)
-		If primaryColour = secondaryColour Then
-			Print(value, textColour:=primaryColour)
-			Exit Sub
-		End If
-
-		'unset colours are set to the current textcolour
-		If primaryColour = Nothing Then
-			primaryColour = TextColour
-		End If
-		If secondaryColour = Nothing Then
-			secondaryColour = TextColour
-		End If
-
-		Dim colours = {primaryColour, secondaryColour}
-		For i = 0 To value.Length - 1
-			Print(value(i), textColour:=colours(i Mod 2))
-		Next
-	End Sub
-
-	Public Sub AlternateBackgroundPrintLine(value As String, Optional primaryColour As Color = Nothing,
-		Optional secondaryColour As Color = Nothing)
-		AlternateBackgroundPrint(value & Environment.NewLine, primaryColour, secondaryColour)
-	End Sub
-
-
-	Public Sub AlternateBackgroundPrint(value As String, Optional primaryColour As Color = Nothing,
-		Optional secondaryColour As Color = Nothing)
-		If primaryColour = secondaryColour Then
-			Print(value, backgroundColour:=primaryColour)
-			Exit Sub
-		End If
-
-		'unset colours are set to the current textcolour
-		If primaryColour = Nothing Then
-			primaryColour = TextColour
-		End If
-		If secondaryColour = Nothing Then
-			secondaryColour = TextColour
-		End If
-
-		Dim colours = {primaryColour, secondaryColour}
-		For i = 0 To value.Length - 1
-			Print(value(i), backgroundColour:=colours(i Mod 2))
-		Next
-	End Sub
-
-	Public Sub AlternatePrintLine(value As String,
-		Optional backgroundColours As Color() = Nothing, Optional textColours As Color() = Nothing)
-		AlternatePrint(value & Environment.NewLine, backgroundColours, textColours)
-	End Sub
-
-	Public Sub AlternatePrint(value As String,
-		Optional backgroundColours As Color() = Nothing, Optional textColours As Color() = Nothing)
-		If IsNothing(textColours) And IsNothing(backgroundColours) Then
-			Print(value)
-			Exit Sub
-		End If
-
-		REM the checks for not isnothing(*) are superfluous from the above conditional but are added for clarity as well as the last for isnothing(y) for the same reason
-		If textColours IsNot Nothing AndAlso textColours.Length = 2 AndAlso IsNothing(backgroundColours) Then
-			AlternateColourPrint(value, textColours(0), textColours(1))
-		ElseIf Not IsNothing(backgroundColours) AndAlso backgroundColours.Length = 2 AndAlso IsNothing(textColours) Then
-			AlternateBackgroundPrint(value, backgroundColours(0), backgroundColours(1))
-		Else
-			If textColours Is Nothing Then
-				textColours = {TextColour}
-			End If
-			If backgroundColours Is Nothing Then
-				backgroundColours = {BackgroundColour}
-			End If
-			_AlternatebackgroundPrInT(value, textColours, backgroundColours)
-
-		End If
-	End Sub
-
-	Private Sub _AlternatebackgroundPrInT(ByVal value As String, ByVal textColours As Color(), backgroundColours As Color())
-		Dim bgColour As Color, txtColour As Color
-		For i = 0 To value.Length - 1
-			bgColour = backgroundColours(i Mod backgroundColours.Length)
-			TxtColour = textColours(i Mod textColours.Length)
-			Print(value(i).ToString, bgColour, TxtColour)
-		Next
-	End Sub
-
 
 #End Region
 
@@ -357,7 +261,7 @@ Public Class PrettyConsole
 		If colour.Name = "0" Then
 			Return False
 		Else
-			Return [Enum].TryParse(Of ConsoleColor)(colour.Name, True, Nothing)
+			Return [Enum].TryParse (Of ConsoleColor)(colour.Name, True, Nothing)
 		End If
 	End Function
 End Class
