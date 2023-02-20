@@ -139,9 +139,11 @@ Partial Class PrettyConsole
 
 		Dim bgCounter = backgroundInterval
 		Dim txtCounter = textInterval
-		Dim bgColour, txtColour As Color
-		Dim bgIndex = -1
-		Dim txtIndex = -1
+		Dim bgIndex = 0
+		Dim txtIndex = 0
+		Dim bgColour = backgroundColours(bgIndex)
+		Dim txtColour As Color = textColours(txtIndex)
+
 		For i = 0 To value.Length - 1
 			Dim currentChar As Char = value(i)
 
@@ -154,10 +156,12 @@ Partial Class PrettyConsole
 
 			If bgCounter = 0 Then
 				bgIndex += 1
+				bgCounter = backgroundInterval
 				bgColour = backgroundColours(bgIndex Mod backgroundColours.Length)
 			End If
 			If txtCounter = 0 Then
 				txtIndex += 1
+				txtCounter = textInterval
 				txtColour = textColours(txtIndex Mod textColours.Length)
 			End If
 

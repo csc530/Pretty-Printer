@@ -20,4 +20,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Pretty Printer\Pretty Printer.vbproj" />
+  </ItemGroup>
+
 </Project>
