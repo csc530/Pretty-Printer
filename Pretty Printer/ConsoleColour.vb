@@ -33,12 +33,17 @@ Public Class ConsoleColour
 
 
 
-
+    Shared Operator =(left As ConsoleColour, right As Color) As Boolean
+        Return Not left.Bright AndAlso left.Value = right
+    End Operator
+    Shared Operator <>(left As ConsoleColour, right As Color) As Boolean
+        Return left.Bright OrElse left.Value <> right
+    End Operator
     Public Shared Operator =(left As ConsoleColour, right As ConsoleColour) As Boolean
         Return left.Value = right.Value AndAlso left.Bright = right.Bright
     End Operator
     Shared Operator <>(left As ConsoleColour, right As ConsoleColour) As Boolean
-        Return left.Value <> right.Value AndAlso left.Bright <> right.Bright
+        Return left.Value <> right.Value OrElse left.Bright <> right.Bright
     End Operator
 
     Public Shared Narrowing Operator CType(value As Color) As ConsoleColour
@@ -58,8 +63,14 @@ Public Class ConsoleColour
         Return value.Value
     End Operator
 
-    Private Enum KnownConsoleColour
-        None
+    Function IsKnownColour() As Boolean
+        Return IsKnownColour(Nothing)
+    End Function
+    Function IsKnownColour(ByRef knownColour As KnownConsoleColour) As Boolean
+        Return Value.IsNamedColor AndAlso [Enum].TryParse(Of KnownConsoleColour)(Value.Name, knownColour)
+    End Function
+
+    Enum KnownConsoleColour
         Black
         Red
         Green
@@ -68,6 +79,5 @@ Public Class ConsoleColour
         Magenta
         Cyan
         White
-        Bright = 16
     End Enum
 End Class
