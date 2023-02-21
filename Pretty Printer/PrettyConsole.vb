@@ -54,6 +54,9 @@ Public Class PrettyConsole
 
 	Function GetVirtualSequences() As String
 		Dim sequence As New StringBuilder
+		'todo: temp fix for some sort of log to track changes and undo the temporary ones on print
+		'i.e. the consolemodifications set
+		sequence.Append(VirtualTerminalSequences.ResetTextFormattingSequence)
 		sequence.Append(VirtualTerminalSequences.GetColourSequence(TextColour, VirtualTerminalSequences.ConsoleLayer.Foreground))
 		sequence.Append(VirtualTerminalSequences.GetColourSequence(BackgroundColour, VirtualTerminalSequences.ConsoleLayer.Background))
 		sequence.Append(VirtualTerminalSequences.GetUnderlinedSequence(Underline))

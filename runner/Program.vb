@@ -1,16 +1,17 @@
 ﻿Imports System.Drawing
 Imports csc530.Pretty
+Imports DL.PrettyText
 
 Module Program
 	Private ReadOnly Pretty As csc530.Pretty.PrettyConsole = New PrettyConsole()
 
 	Function Main(args As String()) As Integer
-
-'		TestUnderline()
-'		TestPrintOverloads()
-'		TestSlowPrint()
-'		TestTextColour()
-		TestAlternatePrint()
+		Pretty.PrintLine($"I'm set blue", , ConsoleColour.BrightBlue)
+				TestUnderline()
+				TestPrintOverloads()
+		TestTextColour()
+				TestAlternatePrint()
+				TestSlowPrint()
 		Return 0
 	End Function
 
@@ -19,35 +20,35 @@ Module Program
 		MultiColourAlternate()
 	End Sub
 
-	Dim rainbow = {Color.Red, Color.Orange, Color.Green, Color.Blue, Color.Indigo, Color.Violet}
+	Dim rainbow as ConsoleColour()= {Color.Red, Color.Orange, Color.Green, Color.Blue, Color.Indigo, Color.Violet}
 
 	Sub MultiColourAlternate()
-		Pretty.AlternatePrint("Now we can get real radical with our coolours...", rainbow, {Color.Tomato, Color.Thistle, Color.Turquoise})
+		dim colours as consolecolour() = {Color.Tomato, Color.Thistle, Color.Turquoise}
+		Pretty.AlternatePrint("Now we can get real radical with our coolours...", rainbow, colours)
 		Pretty.AlternatePrintLine("Fine I'll make it  readable...?", rainbow)
 		Pretty.AlternatePrintLine("better, happy, I am look how pretty I am... :D",, rainbow)
-	End sub
+	End Sub
 
-	Private sub TestSingleColourAlternatePrint()
+	Private Sub TestSingleColourAlternatePrint()
 		Pretty.AlternateColourPrint("This is red then blue....", Color.Red, Color.Blue)
-		Pretty.AlternateColourPrintLine("Now it's green back to normal.. :)",Color.Green)
-		
-		Pretty.AlternateBackgroundPrint("Ok now we're switching up the background....",Color.FromArgb(42,18,223),Color.Aquamarine)
-		Pretty.AlternateBackgroundPrintLine("Ok impressive",Color.MediumSpringGreen)
-	End sub
+		Pretty.AlternateColourPrintLine("Now it's green back to normal.. :)", Color.Green)
+		Pretty.AlternateBackgroundPrint("Ok now we're switching up the background....", Color.FromArgb(42, 18, 223), Color.Aquamarine)
+		Pretty.AlternateBackgroundPrintLine("Ok impressive", Color.MediumSpringGreen)
+	End Sub
 
 	Private Sub TestSlowPrint()
 		Pretty.SlowPrint("Let's slow things down..", 1)
 		Pretty.SlowPrintLine("Ok that was too slow XD")
-		Pretty.SlowPrintLine("Let ramp things up then", 10, unitOfSpeed := PrettyConsole.PrintUnit.Word)
-		Pretty.SlowPrintLine("Let ramp things up then", 1, unitOfSpeed := PrettyConsole.PrintUnit.Line)
+		Pretty.SlowPrintLine("Let ramp things up then", 10, unitOfSpeed:=PrettyConsole.PrintUnit.Word)
+		Pretty.SlowPrintLine("Let ramp things up then", 1, unitOfSpeed:=PrettyConsole.PrintUnit.Line)
 	End Sub
 
 	Private Sub TestPrintOverloads()
 		Pretty.Print("Well Let's do something for the one line", Color.Beige, Color.FromArgb(123))
 		Pretty.PrintLine(" ___ Impressive but let's try state maintenance?")
 		Pretty.PrintLine("Well colour this on for size🌠🌠🌠🌠🌃", Color.Black, Color.Cornsilk)
-		Pretty.PrintLine("Ok finew razzle the ****dazzle**** off of me")
-		Pretty.PrintLine($"{vbCrLf}LEVELED UP AND UNDERLINED", textColour := Color.Azure, underline := True)
+		Pretty.PrintLine("Ok finew razzle the ****dazzle**** off of me", underline := true)
+		Pretty.PrintLine($"{vbCrLf}LEVELED UP AND UNDERLINED", textColour:=Color.Azure, underline:=True)
 	End Sub
 
 	Private Sub TestUnderline()

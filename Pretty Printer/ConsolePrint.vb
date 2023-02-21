@@ -7,8 +7,7 @@ Partial Class PrettyConsole
 	''' <param name="backgroundColour">The background colour of the text</param>
 	''' <param name="textColour">The colour of the text</param>
 	''' <param name="underline">underline the text</param>
-	Public Sub PrintLine(value As String, Optional backgroundColour As ConsoleColour = Nothing,
-						 Optional textColour As ConsoleColour = Nothing, Optional underline As Boolean = False)
+	Public Sub PrintLine(value As String, Optional backgroundColour As ConsoleColour = Nothing, Optional textColour As ConsoleColour = Nothing, Optional underline As Boolean = False)
 		Print(value & Environment.NewLine, backgroundColour, textColour, underline)
 	End Sub
 
@@ -65,7 +64,9 @@ Partial Class PrettyConsole
 				' i.e. the x^-1 inverse because were' sleeping it and not setting the speed
 				' ex. speed 2chars/sec => sleep = 500 = half a second not 2000 = 4chars/sec
 				' by 1000 to convert to milliseconds
+				if speed > 0
 				speed = Convert.ToInt32(Math.Round(1000 / speed, 0))
+				End If
 				_printSlow(value, speed, backgroundColour, textColour, underline)
 			Case PrintUnit.Line
 				For Each line In value.Split(Environment.NewLine)
