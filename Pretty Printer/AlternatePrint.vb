@@ -70,9 +70,7 @@ Partial Class PrettyConsole
 	End Sub
 
 
-	Private Sub _SimpleAlternatePrint(value As String,
-									  Optional backgroundColours As ConsoleColour() = Nothing,
-									  Optional textColours As ConsoleColour() = Nothing)
+	Private Sub _SimpleAlternatePrint(value As String, Optional backgroundColours As ConsoleColour() = Nothing, Optional textColours As ConsoleColour() = Nothing)
 		If IsNothing(textColours) And IsNothing(backgroundColours) Then
 			Print(value)
 			Exit Sub
@@ -114,22 +112,14 @@ Partial Class PrettyConsole
 	''' <param name="backgroundIntervalUnit">The unit to switch the background colour on</param>
 	''' <param name="textInterval">The interval per unit to switch to the next text colour</param>
 	''' <param name="textIntervalUnit">The unit to switch the text colour on</param>
-	Public Sub AlternatePrint(value As String,
-							  Optional backgroundColours As ConsoleColour() = Nothing,
-							  Optional textColours As ConsoleColour() = Nothing,
-							  Optional backgroundInterval As Integer = 1,
-							  Optional backgroundIntervalUnit As PrintUnit = PrintUnit.Character,
-							  Optional textInterval As Integer = 1,
-							  Optional textIntervalUnit As PrintUnit = PrintUnit.Character)
+	Public Sub AlternatePrint(value As String, Optional backgroundColours As ConsoleColour() = Nothing, Optional textColours As ConsoleColour() = Nothing, Optional backgroundInterval As Integer = 1, Optional backgroundIntervalUnit As PrintUnit = PrintUnit.Character, Optional textInterval As Integer = 1, Optional textIntervalUnit As PrintUnit = PrintUnit.Character)
 		REM check if the complex options are left as their defaults
 		If _
 			backgroundInterval = 1 AndAlso backgroundIntervalUnit = PrintUnit.Character AndAlso
 			textIntervalUnit = PrintUnit.Character AndAlso textInterval = 1 Then
 			_SimpleAlternatePrint(value, backgroundColours, textColours)
 		Else
-			_ComplexAlternatePrint(value, backgroundColours, backgroundInterval, backgroundIntervalUnit, textColours,
-								   textInterval,
-								   textIntervalUnit)
+			_ComplexAlternatePrint(value, backgroundColours, backgroundInterval, backgroundIntervalUnit, textColours, textInterval, textIntervalUnit)
 		End If
 	End Sub
 
@@ -137,22 +127,12 @@ Partial Class PrettyConsole
 	'''  Print text and new line character to the console while alternating the background and text's colour
 	''' </summary>
 	''' <inheritdoc cref="AlternatePrint(String, ConsoleColour(), ConsoleColour(), Integer, PrintUnit, Integer, PrintUnit)"/>
-	Public Sub AlternatePrintLine(value As String,
-								  Optional backgroundColours As ConsoleColour() = Nothing,
-								  Optional textColours As ConsoleColour() = Nothing,
-								  Optional backgroundInterval As Integer = 1,
-								  Optional backgroundIntervalUnit As PrintUnit = PrintUnit.Character,
-								  Optional textInterval As Integer = 1,
-								  Optional textIntervalUnit As PrintUnit = PrintUnit.Character)
+	Public Sub AlternatePrintLine(value As String, Optional backgroundColours As ConsoleColour() = Nothing, Optional textColours As ConsoleColour() = Nothing, Optional backgroundInterval As Integer = 1, Optional backgroundIntervalUnit As PrintUnit = PrintUnit.Character, Optional textInterval As Integer = 1, Optional textIntervalUnit As PrintUnit = PrintUnit.Character)
 		value &= Environment.NewLine
 		AlternatePrint(value, backgroundColours, textColours, backgroundInterval, backgroundIntervalUnit, textInterval, textIntervalUnit)
 	End Sub
 
-	Private Sub _ComplexAlternatePrint(value As String, Optional backgroundColours As ConsoleColour() = Nothing,
-									   Optional backgroundInterval As Integer = 1,
-									   Optional backgroundIntervalUnit As PrintUnit = PrintUnit.Character,
-									   Optional textColours As ConsoleColour() = Nothing, Optional textInterval As Integer = 1,
-									   Optional textIntervalUnit As PrintUnit = PrintUnit.Character)
+	Private Sub _ComplexAlternatePrint(value As String, Optional backgroundColours As ConsoleColour() = Nothing, Optional backgroundInterval As Integer = 1, Optional backgroundIntervalUnit As PrintUnit = PrintUnit.Character, Optional textColours As ConsoleColour() = Nothing, Optional textInterval As Integer = 1, Optional textIntervalUnit As PrintUnit = PrintUnit.Character)
 		If backgroundColours Is Nothing AndAlso textColours Is Nothing Then
 			Print(value)
 		End If

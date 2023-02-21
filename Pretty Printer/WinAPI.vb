@@ -3,7 +3,7 @@
 ''' 
 ''' <seealso cref="https://learn.microsoft.com/en-us/windows/console/classic-vs-vt#definitions"/>
 ''' </summary>
-Public NotInheritable Class WindowsConsoleApi
+Public MustInherit Class WindowsConsoleApi
 	Declare Auto Function GetLastError Lib "Kernel32.dll"() As Integer
 
 	' From https://learn.microsoft.com/en-us/windows/console/getconsolemode
