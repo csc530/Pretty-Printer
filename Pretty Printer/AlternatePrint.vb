@@ -4,8 +4,8 @@ Partial Class PrettyConsole
 	''' <summary>
 	''' Print text and new line character to the console while alternating the text's colour each character
 	''' </summary>
-	''' <inheritdoc cref="AlternateColourPrint(String, Color, Color)"/>
-	Public Sub AlternateColourPrintLine(value As String, Optional primaryColour As Color = Nothing, Optional secondaryColour As Color = Nothing)
+	''' <inheritdoc cref="AlternateColourPrint(String, ConsoleColour, ConsoleColour)"/>
+	Public Sub AlternateColourPrintLine(value As String, Optional primaryColour As ConsoleColour = Nothing, Optional secondaryColour As ConsoleColour = Nothing)
 		AlternateColourPrint(value & Environment.NewLine, primaryColour, secondaryColour)
 	End Sub
 
@@ -15,8 +15,7 @@ Partial Class PrettyConsole
 	''' <param name="value">The text to print</param>
 	''' <param name="primaryColour">The first colour of each character</param>
 	''' <param name="secondaryColour">Colour for every other character</param>
-	Public Sub AlternateColourPrint(value As String, Optional primaryColour As Color = Nothing,
-									Optional secondaryColour As Color = Nothing)
+	Public Sub AlternateColourPrint(value As String, Optional primaryColour As ConsoleColour = Nothing, Optional secondaryColour As ConsoleColour = Nothing)
 		If primaryColour = secondaryColour Then
 			Print(value, textColour:=primaryColour)
 			Exit Sub
@@ -39,9 +38,8 @@ Partial Class PrettyConsole
 	''' <summary>
 	''' Print text and new line character to the console while alternating the background text's colour each character 
 	''' </summary>
-	''' <inheritdoc cref="AlternateBackgroundPrint(String, Color, Color)"/>
-	Sub AlternateBackgroundPrintLine(value As String, Optional primaryColour As Color = Nothing,
-									 Optional secondaryColour As Color = Nothing)
+	''' <inheritdoc cref="AlternateBackgroundPrint(String, ConsoleColour, ConsoleColour)"/>
+	Sub AlternateBackgroundPrintLine(value As String, Optional primaryColour As ConsoleColour = Nothing, Optional secondaryColour As ConsoleColour = Nothing)
 		AlternateBackgroundPrint(value & Environment.NewLine, primaryColour, secondaryColour)
 	End Sub
 
@@ -50,9 +48,8 @@ Partial Class PrettyConsole
 	''' </summary>
 	''' <param name="primaryColour">The first colour of the character's background</param>
 	''' <param name="secondaryColour">background colour for every other character</param>
-	''' <inheritdoc cref="AlternateColourPrint(String, Color, Color)"/>
-	Public Sub AlternateBackgroundPrint(value As String, Optional primaryColour As Color = Nothing,
-										Optional secondaryColour As Color = Nothing)
+	''' <inheritdoc cref="AlternateColourPrint(String, ConsoleColour, ConsoleColour)"/>
+	Public Sub AlternateBackgroundPrint(value As String, Optional primaryColour As ConsoleColour = Nothing, Optional secondaryColour As ConsoleColour = Nothing)
 		If primaryColour = secondaryColour Then
 			Print(value, backgroundColour:=primaryColour)
 			Exit Sub
@@ -74,8 +71,8 @@ Partial Class PrettyConsole
 
 
 	Private Sub _SimpleAlternatePrint(value As String,
-									  Optional backgroundColours As Color() = Nothing,
-									  Optional textColours As Color() = Nothing)
+									  Optional backgroundColours As ConsoleColour() = Nothing,
+									  Optional textColours As ConsoleColour() = Nothing)
 		If IsNothing(textColours) And IsNothing(backgroundColours) Then
 			Print(value)
 			Exit Sub
@@ -98,8 +95,8 @@ Partial Class PrettyConsole
 		End If
 	End Sub
 
-	Private Sub _AlternateBackgroundPrint(ByVal value As String, ByVal textColours As Color(), backgroundColours As Color())
-		Dim bgColour, txtColour As Color
+	Private Sub _AlternateBackgroundPrint(ByVal value As String, ByVal textColours As ConsoleColour(), backgroundColours As ConsoleColour())
+		Dim bgColour, txtColour As ConsoleColour
 		For i = 0 To value.Length - 1
 			bgColour = backgroundColours(i Mod backgroundColours.Length)
 			txtColour = textColours(i Mod textColours.Length)
@@ -118,8 +115,8 @@ Partial Class PrettyConsole
 	''' <param name="textInterval">The interval per unit to switch to the next text colour</param>
 	''' <param name="textIntervalUnit">The unit to switch the text colour on</param>
 	Public Sub AlternatePrint(value As String,
-							  Optional backgroundColours As Color() = Nothing,
-							  Optional textColours As Color() = Nothing,
+							  Optional backgroundColours As ConsoleColour() = Nothing,
+							  Optional textColours As ConsoleColour() = Nothing,
 							  Optional backgroundInterval As Integer = 1,
 							  Optional backgroundIntervalUnit As PrintUnit = PrintUnit.Character,
 							  Optional textInterval As Integer = 1,
@@ -139,10 +136,10 @@ Partial Class PrettyConsole
 	''' <summary>
 	'''  Print text and new line character to the console while alternating the background and text's colour
 	''' </summary>
-	''' <inheritdoc cref="AlternatePrint(String, Color(), Color(), Integer, PrintUnit, Integer, PrintUnit)"/>
+	''' <inheritdoc cref="AlternatePrint(String, ConsoleColour(), ConsoleColour(), Integer, PrintUnit, Integer, PrintUnit)"/>
 	Public Sub AlternatePrintLine(value As String,
-								  Optional backgroundColours As Color() = Nothing,
-								  Optional textColours As Color() = Nothing,
+								  Optional backgroundColours As ConsoleColour() = Nothing,
+								  Optional textColours As ConsoleColour() = Nothing,
 								  Optional backgroundInterval As Integer = 1,
 								  Optional backgroundIntervalUnit As PrintUnit = PrintUnit.Character,
 								  Optional textInterval As Integer = 1,
@@ -151,10 +148,10 @@ Partial Class PrettyConsole
 		AlternatePrint(value, backgroundColours, textColours, backgroundInterval, backgroundIntervalUnit, textInterval, textIntervalUnit)
 	End Sub
 
-	Private Sub _ComplexAlternatePrint(value As String, Optional backgroundColours As Color() = Nothing,
+	Private Sub _ComplexAlternatePrint(value As String, Optional backgroundColours As ConsoleColour() = Nothing,
 									   Optional backgroundInterval As Integer = 1,
 									   Optional backgroundIntervalUnit As PrintUnit = PrintUnit.Character,
-									   Optional textColours As Color() = Nothing, Optional textInterval As Integer = 1,
+									   Optional textColours As ConsoleColour() = Nothing, Optional textInterval As Integer = 1,
 									   Optional textIntervalUnit As PrintUnit = PrintUnit.Character)
 		If backgroundColours Is Nothing AndAlso textColours Is Nothing Then
 			Print(value)
@@ -174,7 +171,7 @@ Partial Class PrettyConsole
 		Dim bgIndex = 0
 		Dim txtIndex = 0
 		Dim bgColour = backgroundColours(bgIndex)
-		Dim txtColour As Color = textColours(txtIndex)
+		Dim txtColour As ConsoleColour = textColours(txtIndex)
 
 		For i = 0 To value.Length - 1
 			Dim currentChar As Char = value(i)

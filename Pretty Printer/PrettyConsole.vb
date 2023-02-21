@@ -26,7 +26,7 @@ Public Class PrettyConsole
 	''' <summary>
 	''' Starting escape sequence to enter virtual terminal sequences
 	''' </summary>
-	Shared ReadOnly SequenceStart As String = $"{Convert.ToChar(ConsoleKey.Escape)}["
+public	Shared ReadOnly SequenceStart As String = $"{Convert.ToChar(ConsoleKey.Escape)}["
 	''' <summary>
 	''' List of modifications to console output
 	''' </summary>
@@ -61,20 +61,20 @@ Public Class PrettyConsole
 					sequences.Append("m"c)
 
 				Case ConsoleVirtualTerminalSequences.TextBackground
-					If BackgroundColour = Nothing Then
+					If BackgroundColour Is Nothing Then
 						sequences.Append(49)
 						ConsoleModifications.Remove(ConsoleVirtualTerminalSequences.TextBackground)
 					Else
-						sequences.Append($"48;2;{BackgroundColour.R};{BackgroundColour.G};{BackgroundColour.B}")
+						sequences.Append($"48;2;{BackgroundColour.value.R};{BackgroundColour.value.G};{BackgroundColour.value.B}")
 					End If
 					sequences.Append("m"c)
 
 				Case ConsoleVirtualTerminalSequences.TextColour
-					If TextColour = Nothing Then
+					If TextColour Is Nothing Then
 						sequences.Append(39)
 						ConsoleModifications.Remove(ConsoleVirtualTerminalSequences.TextColour)
 					Else
-						sequences.Append($"38;2;{TextColour.R};{TextColour.G};{TextColour.B}")
+						sequences.Append($"38;2;{TextColour.Value.R};{TextColour.value.G};{TextColour.value.B}")
 					End If
 					sequences.Append("m"c)
 
@@ -102,7 +102,7 @@ Public Class PrettyConsole
 		End Set
 	End Property
 
-	Private _backgroundColour As Color
+	Private _backgroundColour As ConsoleColour
 
 	''' <summary>
 	''' The output's background colour; does NOT SUPPORT TRANSPARENCY in colours
@@ -111,11 +111,11 @@ Public Class PrettyConsole
 	''' The background colour;
 	''' </value>
 	''' <returns></returns>
-	Public Property BackgroundColour As Color
+	Public Property BackgroundColour As ConsoleColour
 		Get
 			Return _backgroundColour
 		End Get
-		Set(value As Color)
+		Set(value As ConsoleColour)
 			_backgroundColour = value
 			ConsoleModifications.Add(ConsoleVirtualTerminalSequences.TextBackground)
 		End Set
@@ -125,16 +125,17 @@ Public Class PrettyConsole
 	''' The text colour;
 	''' does NOT SUPPORT TRANSPARENCY in colours
 	''' </summary>
-	Private _textColour As Color
+	Private _textColour As ConsoleColour
 
-	Public Property TextColour As Color
+	Public Property TextColour As ConsoleColour
 		Get
 			Return _textColour
 		End Get
-		Set(value As Color)
+		Set(value As ConsoleColour)
 			_textColour = value
 			ConsoleModifications.Add(ConsoleVirtualTerminalSequences.TextColour)
 		End Set
+
 	End Property
 
 
@@ -176,116 +177,4 @@ Public Class PrettyConsole
 	Sub Clear()
 		System.Console.Clear()
 	End Sub
-
-
-#Region "Print"
-
-
-	''' <inheritdoc cref="PrintLine(String)"/>
-	''' <param name="backgroundColour">The background colour of the text</param>
-	''' <param name="textColour">The colour of the text</param>
-	''' <param name="underline">underline the text</param>
-	Public Sub PrintLine(value As String, Optional backgroundColour As Color = Nothing,
-						 Optional textColour As Color = Nothing, Optional underline As Boolean = False)
-		Print(value & Environment.NewLine, backgroundColour, textColour, underline)
-	End Sub
-
-	''' <summary>
-	''' Print given text with an appended new line character to the console
-	''' </summary>
-	''' <param name="value">the text to print</param>
-	Sub PrintLine(value As String)
-		Print(value & Environment.NewLine)
-	End Sub
-
-	'''<inheritdoc cref="Print(String)"/>
-	Sub Print(value As String, Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing,
-			  Optional underline As Boolean = False)
-
-		Dim previous = (Me.BackgroundColour, Me.TextColour, underline)
-		Me.BackgroundColour = backgroundColour
-		Me.TextColour = textColour
-		Me.Underline = underline
-		Print(value)
-		' ? revert back to original values
-		Me.BackgroundColour = previous.BackgroundColour
-		Me.TextColour = previous.TextColour
-		Me.Underline = previous.underline
-	End Sub
-
-	''' <summary>Print the givent text to the console output</summary>
-	''' <inheritdoc cref="PrintLine(String, Color, Color, Boolean)"/>
-	Sub Print(value As String)
-		System.Console.Write(GetVirtualSequences() & value)
-	End Sub
-
-	'''<summary>Print to the console ending with a new line character at a set speed; imitates typing text</summary>
-	'''<inheritdoc cref="SlowPrint(String, Integer, Color, Color, Boolean, PrintUnit)"/>
-	Sub SlowPrintLine(value As String, Optional speed As Integer = 15,
-					  Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing,
-					  Optional underline As Boolean = False, Optional unitOfSpeed As PrintUnit = PrintUnit.Character)
-		SlowPrint(value & Environment.NewLine, speed, backgroundColour, textColour, underline, unitOfSpeed)
-	End Sub
-
-	''' <summary>
-	''' Print to the console at a set speed; imitates typing text
-	''' </summary>
-	''' <param name="value">The value to print</param>
-	''' <param name="speed">The speed as <paramref name="unitOfSpeed">units</paramref> per second</param>
-	''' <param name="backgroundColour">The background colour.</param>
-	''' <param name="textColour">The text colour.</param>
-	''' <param name="underline">if set to <c>true</c> underlines the text.</param>
-	''' <param name="unitOfSpeed">The unit to print per second.</param>
-	Sub SlowPrint(value As String, Optional speed As Integer = 15, Optional backgroundColour As Color = Nothing, Optional textColour As Color = Nothing, Optional underline As Boolean = False, Optional unitOfSpeed As PrintUnit = PrintUnit.Character)
-		' * made it blocking as if they try to print or modify the classes values not errors are thrown, sry🤷🏿‍♂️
-		Select Case unitOfSpeed
-			Case PrintUnit.Character
-				' i.e. the x^-1 inverse because were' sleeping it and not setting the speed
-				' ex. speed 2chars/sec => sleep = 500 = half a second not 2000 = 4chars/sec
-				' by 1000 to convert to milliseconds
-				speed = Convert.ToInt32(Math.Round(1000 / speed, 0))
-				_printSlow(value, speed, backgroundColour, textColour, underline)
-			Case PrintUnit.Line
-				For Each line In value.Split(Environment.NewLine)
-					' simply put; we want to print out chars per second with the unit chars duh🙄
-					SlowPrint(line, line.Length, backgroundColour, textColour, underline, PrintUnit.Character)
-				Next
-			Case PrintUnit.Word
-				For Each word In value.Split(" ")
-					SlowPrint(word & " ", word.Length, backgroundColour, textColour, underline, PrintUnit.Character)
-				Next
-		End Select
-	End Sub
-
-	Private Sub _printSlow(value As String, speed As Integer, backgroundColour As Color, textColour As Color,
-						   underline As Boolean)
-		Dim character As Char
-		For index = 0 To value.Length - 1
-			character = value(index)
-			Print(character, backgroundColour, textColour, underline)
-			If _
-				index + 1 < value.Length AndAlso
-				(Environment.NewLine = value(index + 1) OrElse value(index + 1) = vbCrLf OrElse value(index + 1) = vbLf) Then
-				Print(value(index + 1), backgroundColour, textColour, underline)
-				index += 1
-				'todo change cursor to underline just not block makes newline jump jarring
-				If index + 1 <> value.Length - 1 Then
-					Thread.Sleep(Convert.ToInt32((285 * speed / 67)))
-				End If
-			Else
-				Thread.Sleep(speed)
-			End If
-		Next
-	End Sub
-
-#End Region
-
-
-	Private Shared Function IsConsoleColour(colour As Color) As Boolean
-		If colour.Name = "0" Then
-			Return False
-		Else
-			Return [Enum].TryParse(Of ConsoleColor)(colour.Name, True, Nothing)
-		End If
-	End Function
 End Class

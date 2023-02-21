@@ -1,22 +1,22 @@
 ﻿Imports System.Drawing
 
 Public Class ConsoleColour
-    Shared ReadOnly Black As New ConsoleColour(Color.Black)
-    Shared ReadOnly Red As New ConsoleColour(Color.Red)
-    Shared ReadOnly Green As New ConsoleColour(Color.Green)
-    Shared ReadOnly Yellow As New ConsoleColour(Color.Yellow)
-    Shared ReadOnly Blue As New ConsoleColour(Color.Blue)
-    Shared ReadOnly magenta As New ConsoleColour(Color.Magenta)
-    Shared ReadOnly Cyan As New ConsoleColour(Color.Cyan)
-    Shared ReadOnly White As New ConsoleColour(Color.White)
-    Shared ReadOnly BrightBlack As New ConsoleColour(Color.Black, True)
-    Shared ReadOnly BrightRed As New ConsoleColour(Color.Red, True)
-    Shared ReadOnly BrightGreen As New ConsoleColour(Color.Green, True)
-    Shared ReadOnly BrightYellow As New ConsoleColour(Color.Yellow, True)
-    Shared ReadOnly BrightBlue As New ConsoleColour(Color.Blue, True)
-    Shared ReadOnly Brightmagenta As New ConsoleColour(Color.Magenta, True)
-    Shared ReadOnly BrightCyan As New ConsoleColour(Color.Cyan, True)
-    Shared ReadOnly BrightWhite As New ConsoleColour(Color.White, True)
+    Public Shared ReadOnly Black As New ConsoleColour(Color.Black)
+    Public Shared ReadOnly Red As New ConsoleColour(Color.Red)
+    Public Shared ReadOnly Green As New ConsoleColour(Color.Green)
+    Public Shared ReadOnly Yellow As New ConsoleColour(Color.Yellow)
+    Public Shared ReadOnly Blue As New ConsoleColour(Color.Blue)
+    Public Shared ReadOnly Magenta As New ConsoleColour(Color.Magenta)
+    Public Shared ReadOnly Cyan As New ConsoleColour(Color.Cyan)
+    Public Shared ReadOnly White As New ConsoleColour(Color.White)
+    Public Shared ReadOnly BrightBlack As New ConsoleColour(Color.Black, True)
+    Public Shared ReadOnly BrightRed As New ConsoleColour(Color.Red, True)
+    Public Shared ReadOnly BrightGreen As New ConsoleColour(Color.Green, True)
+    Public Shared ReadOnly BrightYellow As New ConsoleColour(Color.Yellow, True)
+    Public Shared ReadOnly BrightBlue As New ConsoleColour(Color.Blue, True)
+    Public Shared ReadOnly BrightMagenta As New ConsoleColour(Color.Magenta, True)
+    Public Shared ReadOnly BrightCyan As New ConsoleColour(Color.Cyan, True)
+    Public Shared ReadOnly BrightWhite As New ConsoleColour(Color.White, True)
 
 
     Public Property Bright As Boolean
@@ -30,6 +30,16 @@ Public Class ConsoleColour
         Me.New(bright)
         Me.Value = value
     End Sub
+
+
+
+
+    Public Shared Operator =(left As ConsoleColour, right As ConsoleColour) As Boolean
+        Return left.Value = right.Value AndAlso left.Bright = right.Bright
+    End Operator
+    Shared Operator <>(left As ConsoleColour, right As ConsoleColour) As Boolean
+        Return left.Value <> right.Value AndAlso left.Bright <> right.Bright
+    End Operator
 
     Public Shared Narrowing Operator CType(value As Color) As ConsoleColour
         Return New ConsoleColour(value)
