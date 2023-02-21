@@ -23,7 +23,7 @@ Partial Class PrettyConsole
 	Sub Print(value As String, Optional backgroundColour As ConsoleColour = Nothing, Optional textColour As ConsoleColour = Nothing,
 			  Optional underline As Boolean = False)
 
-		Dim previous = (Me.BackgroundColour, Me.TextColour, underline)
+		Dim previous = (Me.BackgroundColour, Me.TextColour, Me.Underline)
 		Me.BackgroundColour = backgroundColour
 		Me.TextColour = textColour
 		Me.Underline = underline
