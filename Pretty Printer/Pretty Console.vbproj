@@ -1,24 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>csc530.Pretty</RootNamespace>
     <TargetFramework>net7.0</TargetFramework>
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
     <OptionStrict>On</OptionStrict>
-    <Description>Utility class for console operations. Mainly for adding custom colours to the fore and background beyond the set ConsoleColours.</Description>
+    <Description>Console wrapper class for extended operations. Mainly for adding custom colours to the fore and background beyond the set ConsoleColours.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/csc530/Pretty-Printer</RepositoryUrl>
-    <PackageTags>console;pretty;colour output;console utility</PackageTags>
+    <PackageTags>console;pretty;colour output;console utility;</PackageTags>
     <NeutralLanguage>en-CA</NeutralLanguage>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-    <Title>Pretty Printer</Title>
+    <Title>Pretty ConsoleConsole</Title>
     <Authors>csc530</Authors>
-    <Version>1.0.0-alpha</Version>
+    <Version>1.1.0-alpha</Version>
     <PackageReleaseNotes>First release basic/main functionality</PackageReleaseNotes>
     <PackageId>csc530.PrettyConsole</PackageId>
     <RepositoryType>git</RepositoryType>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <RootNamespace>csc530.Pretty</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
