@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <RootNamespace>Test_Pretty_Console</RootNamespace>
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Pretty Printer\Pretty Printer.vbproj" />
+    <ProjectReference Include="..\..\Pretty Printer\Pretty Console.vbproj" />
   </ItemGroup>
 
 </Project>
