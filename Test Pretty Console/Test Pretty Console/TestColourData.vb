@@ -2,33 +2,34 @@
 
 
 Public Class TestColourData
-	Public Shared ReadOnly Property SingleRainbow As IEnumerable(Of Object())
-		Get
-			Dim arr As List(Of Object()) = New List(Of Object())
-			arr.Add({Color.Red})
-			arr.Add({Color.Orange})
-			arr.Add({Color.Green})
-			arr.Add({Color.Blue})
-			arr.Add({Color.Indigo})
-			arr.Add({Color.Violet})
-			REM custom colour
-			arr.Add({Color.FromArgb(77, 72, 134)})
-			arr.Add({Color.FromArgb(68, 212, 54)})
-			arr.Add({Color.FromArgb(158, 62, 229)})
 
-			Return arr
-
-		End Get
-	End Property
-
+	Public Shared ReadOnly ROYGBIV As Color() = {Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Indigo, Color.Violet}
+	Public Shared ReadOnly UniqueNamed As Color() = {Color.OrangeRed, Color.DarkOrange, Color.LightGoldenrodYellow, Color.LawnGreen, Color.DodgerBlue, Color.Khaki, Color.PaleVioletRed}
+	Public Shared ReadOnly customColours As Color() = {Color.FromArgb(0, 12, 212), Color.FromArgb(122, 88, 91), Color.FromArgb(100, 100, 100)}
 	Public Shared ReadOnly Iterator Property Rainbow As IEnumerable(Of Object())
 		Get
-			Yield Array.ConvertAll({Color.Red, Color.Orange, Color.Green, Color.Blue, Color.Indigo, Color.Violet}, AddressOf Converter)
+			For Each colour In ROYGBIV
+				Yield {colour}
+			Next
 		End Get
 	End Property
 
-	Private Shared Function Converter(color As Color) As Object
+	Public Shared ReadOnly Iterator Property CustomColour As IEnumerable(Of Object())
+		Get
+			For Each colour In customColours
+				Yield {colour}
+			Next
+		End Get
+	End Property
+	Public Shared ReadOnly Iterator Property UniqueNamedColours As IEnumerable(Of Object())
+		Get
+			For Each colour In UniqueNamed
+				Yield {colour}
+			Next
+		End Get
+	End Property
 
-		Return CType(color, Object)
-	End Function
+End Class
+
+Friend Class List
 End Class
