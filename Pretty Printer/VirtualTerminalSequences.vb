@@ -73,7 +73,7 @@ Public MustInherit Class VirtualTerminalSequences
 			If layer = ConsoleLayer.Background Then
 				value += 10
 			End If
-			If colour.IsKnownColour(knownColour) Then
+			If [Enum].TryParse(colour.Value.Name, True, knownColour) Then
 				If colour.Bright Then
 					value += 60
 				End If

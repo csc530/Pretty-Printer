@@ -30,6 +30,3 @@ Public Class TestColourData
 	End Property
 
 End Class
-
-Friend Class List
-End Class

@@ -3,8 +3,7 @@ Imports csc530.Pretty
 Imports Xunit
 Imports Xunit.Abstractions
 
-Namespace Test_Pretty_Console
-    Public Class PrintTest
+Public Class PrintTest
 
         Private ReadOnly output As ITestOutputHelper
         Private ReadOnly prettyConsole As PrettyConsole
@@ -23,5 +22,4 @@ Namespace Test_Pretty_Console
 
         End Sub
     End Class
-End Namespace
 

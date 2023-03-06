@@ -1,17 +1,18 @@
 ﻿Imports System.Drawing
 Imports csc530.Pretty
 Imports DL.PrettyText
+Imports runner.Test_Pretty_Console
 
 Module Program
 	Private ReadOnly Pretty As csc530.Pretty.PrettyConsole = New PrettyConsole()
 
 	Function Main(args As String()) As Integer
-		Pretty.PrintLine($"I'm set blue", , ConsoleColour.BrightBlue)
-				TestUnderline()
-				TestPrintOverloads()
+		Pretty.PrintLine(Environment.ExitCode, , ConsoleColour.BrightBlue)
+		TestUnderline()
+		TestPrintOverloads()
 		TestTextColour()
-				TestAlternatePrint()
-				TestSlowPrint()
+		TestAlternatePrint()
+		TestSlowPrint()
 		Return 0
 	End Function
 
@@ -20,10 +21,10 @@ Module Program
 		MultiColourAlternate()
 	End Sub
 
-	Dim rainbow as ConsoleColour()= {Color.Red, Color.Orange, Color.Green, Color.Blue, Color.Indigo, Color.Violet}
+	Dim rainbow As ConsoleColour() = {Color.Red, Color.Orange, Color.Green, Color.Blue, Color.Indigo, Color.Violet}
 
 	Sub MultiColourAlternate()
-		dim colours as consolecolour() = {Color.Tomato, Color.Thistle, Color.Turquoise}
+		Dim colours As ConsoleColour() = {Color.Tomato, Color.Thistle, Color.Turquoise}
 		Pretty.AlternatePrint("Now we can get real radical with our coolours...", rainbow, colours)
 		Pretty.AlternatePrintLine("Fine I'll make it  readable...?", rainbow)
 		Pretty.AlternatePrintLine("better, happy, I am look how pretty I am... :D",, rainbow)
@@ -47,7 +48,7 @@ Module Program
 		Pretty.Print("Well Let's do something for the one line", Color.Beige, Color.FromArgb(123))
 		Pretty.PrintLine(" ___ Impressive but let's try state maintenance?")
 		Pretty.PrintLine("Well colour this on for size🌠🌠🌠🌠🌃", Color.Black, Color.Cornsilk)
-		Pretty.PrintLine("Ok finew razzle the ****dazzle**** off of me", underline := true)
+		Pretty.PrintLine("Ok finew razzle the ****dazzle**** off of me", underline:=True)
 		Pretty.PrintLine($"{vbCrLf}LEVELED UP AND UNDERLINED", textColour:=Color.Azure, underline:=True)
 	End Sub
 

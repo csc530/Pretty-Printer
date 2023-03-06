@@ -13,6 +13,7 @@ Public Class PrettyConsole
 	''' Underline printed console text
 	''' </summary>
 	''' <returns><see cref="Boolean"/> if the current output will underlined</returns>
+	'todo: doesn't work on intellij console
 	Public Property Underline As Boolean
 
 

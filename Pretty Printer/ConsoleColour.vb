@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing
+Imports System.Text
 
 Public Class ConsoleColour
 	Public Shared ReadOnly Black As New ConsoleColour(Color.Black)
@@ -23,8 +24,8 @@ Public Class ConsoleColour
 	Property Value As Color
 
 	Sub New(Optional bright As Boolean = False)
+		Me.New
 		Me.Bright = bright
-		Value = Color.Empty
 	End Sub
 
 	Sub New(value As Color, Optional bright As Boolean = False)
@@ -32,55 +33,98 @@ Public Class ConsoleColour
 		Me.Value = value
 	End Sub
 
+	Public Sub New()
+		Bright = Nothing
+		Value = Color.Empty
+	End Sub
+
+	Public Overrides Function Equals(obj As Object) As Boolean
+		If obj.GetType = GetType(ConsoleColour) Then
+			Return CType(obj, ConsoleColour) = Me
+		ElseIf obj.GetType = GetType(ConsoleColor) Then
+			Return Me = CType(obj, ConsoleColor)
+		ElseIf obj.GetType = GetType(Color) Then
+			Return Me = CType(obj, Color)
+		Else
+			Return False
+		End If
+	End Function
+
+	Public Overrides Function ToString() As String
+		If Value = Nothing OrElse Value = Color.Empty Then
+			Return "Default (Colourless)"
+		End If
+		Dim sb As New StringBuilder
+		If Bright Then
+			sb.Append("Bright")
+			sb.Append(" "c)
+		End If
+		If Value.IsNamedColor Then
+			sb.Append(Value.Name)
+		Else
+			sb.Append($"{{{Value.R}, {Value.G}, {Value.B}}}")
+		End If
+		Return sb.ToString
+	End Function
+
 
 	Shared Operator =(left As ConsoleColour, right As Color) As Boolean
-		if left is nothing
-			return right = nothing
-		else if right = nothing
-			return left is nothing
-		else
+		If left Is Nothing Then
+			Return right = Nothing
+		ElseIf right = Nothing Then
+			Return left Is Nothing
+		Else
 			Return Not left.Bright AndAlso left.Value = right
-		end if
+		End If
 	End Operator
 
 	Shared Operator <>(left As ConsoleColour, right As Color) As Boolean
-		if left is nothing
-			return right <> nothing
-		else if right = nothing
-			return left isnot nothing
-		else
+		If left Is Nothing Then
+			Return right <> Nothing
+		ElseIf right = Nothing Then
+			Return left IsNot Nothing
+		Else
 			Return left.Bright OrElse left.Value <> right
-		end if
+		End If
 	End Operator
 
 	Public Shared Operator =(left As ConsoleColour, right As ConsoleColour) As Boolean
-		if left is nothing
-			return right is nothing
-		else       if right is nothing
-			return left is nothing
-		else
+		If left Is Nothing Then
+			Return right Is Nothing
+		ElseIf right Is Nothing Then
+			Return left Is Nothing
+		Else
 			Return left.Value = right.Value AndAlso left.Bright = right.Bright
 		End If
 	End Operator
 
 	Shared Operator <>(left As ConsoleColour, right As ConsoleColour) As Boolean
-		if left is nothing
-			return right isnot nothing
-		else       if right is nothing
-			return left isnot nothing
-		else
+		If left Is Nothing Then
+			Return right IsNot Nothing
+		ElseIf right Is Nothing Then
+			Return left IsNot Nothing
+		Else
 			Return left.Value <> right.Value OrElse left.Bright <> right.Bright
 		End If
 	End Operator
 
-	Public Shared Narrowing Operator CType(value As Color) As ConsoleColour
+	Public Shared Widening Operator CType(value As Color) As ConsoleColour
 		Return New ConsoleColour(value)
 	End Operator
 
+	Public Shared Widening Operator CType(value As KnownColor) As ConsoleColour
+		Return New ConsoleColour(Color.FromKnownColor(value))
+	End Operator
+
 	Public Shared Widening Operator CType(value As ConsoleColor) As ConsoleColour
-		Dim result As KnownColor
+		Dim result As ConsoleColor
 		If [Enum].TryParse(value.ToString, result) Then
-			Return New ConsoleColour(Color.FromKnownColor(result))
+			If result = ConsoleColor.DarkYellow Then
+				REM DArk yellow isn't a named colour for some reason so it's equivalent according to uncle google is ochre as defined below
+				Dim ochre = Color.FromArgb(205, 105, 0)
+				Return New ConsoleColour(ochre)
+			End If
+			Return New ConsoleColour(Color.FromName(result.ToString))
 		Else
 			'todo: decide best return type basically erroneous and impossible input
 			'nothing, empty cc, or err
@@ -88,20 +132,17 @@ Public Class ConsoleColour
 		End If
 	End Operator
 
-	Overloads Shared Widening Operator CType(value As ConsoleColour) As Color
-		if value is nothing
-			return nothing
+	'Decided on narrowing since th representation of bright can't be transferred to color
+	Overloads Shared Narrowing Operator CType(value As ConsoleColour) As Color
+		If value = Nothing Then
+			Return Nothing
 		Else
 			Return value.Value
 		End If
 	End Operator
 
 	Function IsKnownColour() As Boolean
-		Return IsKnownColour(Nothing)
-	End Function
-
-	Function IsKnownColour(ByRef knownColour As KnownConsoleColour) As Boolean
-		Return Value.IsNamedColor AndAlso [Enum].TryParse (Of KnownConsoleColour)(Value.Name, knownColour)
+		Return [Enum].TryParse(Of KnownConsoleColour)(Value.Name, Nothing)
 	End Function
 
 	Enum KnownConsoleColour
